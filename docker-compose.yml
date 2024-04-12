@@ -1,0 +1,32 @@
+services:
+  nodeserver:
+    #image: express_img:latest
+    build: .
+    ports:
+      - "5000:5000"
+    networks:
+      - app_server
+  
+  nginx:
+    restart: always
+      #image: nginx_img:latest
+    build: ./docker/web_server
+    ports:
+      - "80:80"
+    networks:
+      - app_server
+
+  db:
+    #image: postgre_db_img
+    build: ./docker/db
+    restart: always
+    environment:
+      POSTGRES_PASSWORD: lGTzsGizanefhDd56r
+        #ports:
+        #  - "5432:5432"
+    networks:
+      - app_server
+
+networks:
+  app_server:
+    driver: bridge
