@@ -4,9 +4,15 @@ WORKDIR /usr/src/app
 
 COPY package*.json /usr/src/app/
 
+RUN rm -rf node_modules
+
+RUN rm -rf dist
+
 RUN npm install
 
 COPY . .
+
+RUN npm run build
 
 EXPOSE 5000
 
