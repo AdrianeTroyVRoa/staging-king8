@@ -22,11 +22,16 @@ services:
     restart: always
     environment:
       POSTGRES_PASSWORD: lGTzsGizanefhDd56r
-        #ports:
-        #  - "5432:5432"
+    ports:
+      - "5432:5432"
     networks:
       - app_server
+    volumes:
+      - db_data:/var/lib/postgresql/data
 
 networks:
   app_server:
     driver: bridge
+
+volumes:
+  db_data:
