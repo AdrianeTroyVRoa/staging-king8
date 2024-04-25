@@ -17,7 +17,7 @@ function Header() {
           <ul className="flex flex-col mt-4 lg:flex-row lg:space-x-8 lg:mt-0">
             {menuItems.map((item, index) => (
               <li key={index}>
-                <a className="block py-2 pr-4 pl-3 font-bold hover:text-blue-700">
+                <a href={"/"+item.toLowerCase()} className="block py-2 pr-4 pl-3 font-bold hover:text-blue-700">
                   {item}
                 </a>
               </li>
