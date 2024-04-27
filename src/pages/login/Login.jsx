@@ -1,8 +1,7 @@
-import { render } from "solid-js/web";
-import Header from "./Header";
-import './output.css';
+import Header from "../../components/Header";
+import '../../style/output.css';
 
-function Login() {
+export default function Login() {
   return (
     <>
       <Header />
@@ -92,5 +91,3 @@ function Login() {
     </>
   );
 }
-
-render(() => Login, document.getElementById("app"));

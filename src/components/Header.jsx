@@ -1,4 +1,4 @@
-import king8 from "./assets/king8-logo.png";
+import king8 from "../assets/king8-logo.png";
 
 function Header() {
   const menuItems = ["HOME", "PRODUCTS", "ABOUT US", "CONTACT US"];
@@ -27,7 +27,7 @@ function Header() {
         <div className="hidden justify-between items-center w-full lg:flex lg:w-auto lg:order-1">
           <div className="flex flex-col mt-4 lg:flex-row lg:space-x-8 lg:mt-0">
             <a className="font-bold bg-amber-400 text-light py-3 px-4 rounded-lg hover:bg-amber-500">SIGN UP</a>
-            <a className="font-bold border-solid border-2 border-blue-950 text-light py-3 px-4 rounded-lg hover:bg-white">LOG IN</a>
+            <a href="/login" className="font-bold border-solid border-2 border-blue-950 text-light py-3 px-4 rounded-lg hover:bg-white">LOG IN</a>
           </div>
         </div>
       </div>
