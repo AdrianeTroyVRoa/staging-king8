@@ -1,5 +1,6 @@
 import Header from "../../components/Header";
-import '../../style/output.css';
+import "../../style/output.css";
+import king8 from "../../assets/king8-logo.png";
 
 export default function Login() {
   return (
@@ -7,13 +8,8 @@ export default function Login() {
       <Header />
       <div class="flex min-h-full flex-col justify-center px-6 py-12 lg:px-8">
         <div class="sm:mx-auto sm:w-full sm:max-w-sm">
-          <img
-            class="mx-auto h-10 w-auto"
-            src="https://tailwindui.com/img/logos/mark.svg?color=indigo&shade=600"
-            alt="Your Company"
-          />
           <h2 class="mt-10 text-center text-2xl font-bold leading-9 tracking-tight text-gray-900">
-            Sign in to your account
+            LOGIN
           </h2>
         </div>
 
@@ -33,7 +29,7 @@ export default function Login() {
                   type="email"
                   autocomplete="email"
                   required
-                  class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                  class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 sm:text-sm sm:leading-6"
                 />
               </div>
             </div>
@@ -49,7 +45,7 @@ export default function Login() {
                 <div class="text-sm">
                   <a
                     href="#"
-                    class="font-semibold text-indigo-600 hover:text-indigo-500"
+                    class="font-semibold text-blue-950 hover:text-blue-700"
                   >
                     Forgot password?
                   </a>
@@ -62,7 +58,7 @@ export default function Login() {
                   type="password"
                   autocomplete="current-password"
                   required
-                  class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                  class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 sm:text-sm sm:leading-6"
                 />
               </div>
             </div>
@@ -70,7 +66,7 @@ export default function Login() {
             <div>
               <button
                 type="submit"
-                class="flex w-full justify-center rounded-md bg-indigo-600 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+                class="flex w-full justify-center rounded-md bg-blue-950 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-blue-700 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
               >
                 Sign in
               </button>
@@ -78,12 +74,12 @@ export default function Login() {
           </form>
 
           <p class="mt-10 text-center text-sm text-gray-500">
-            Not a member?
+            Not yet registered? 
             <a
               href="#"
-              class="font-semibold leading-6 text-indigo-600 hover:text-indigo-500"
+              class="font-semibold leading-6 text-blue-950 hover:text-blue-700"
             >
-              Start a 14 day free trial
+              Sign up
             </a>
           </p>
         </div>
