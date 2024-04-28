@@ -5,7 +5,7 @@ import htmlInject from "vite-plugin-html-inject";
 // import devtools from 'solid-devtools/vite';
 
 export default defineConfig({
-  root: "src/pages/login/",
+  root: 'src/pages/home',
   plugins: [
     /* 
     Uncomment the following line to enable solid-devtools.
@@ -28,31 +28,25 @@ export default defineConfig({
           template: "src/pages/login/index.html",
           filename: "login.html",
         },
+        {
+          injectTo: "body",
+          entry: "src/pages/register/index.jsx",
+          template: "src/pages/register/index.html",
+          filename: "register.html",
+        },
       ],
     }),
   ],
   build: {
     rollupOptions: {
-      //target: "esnext",
-      emptyOutDir: true,
       input: {
         home: resolve(__dirname, "src/pages/home/index.html"),
         login: resolve(__dirname, "src/pages/login/index.html"),
+        register: resolve(__dirname, "src/pages/register/index.html"),
       },
     },
   },
   server: {
     port: 3000,
   },
-  /*
-  build: {
-    target: "esnext",
-    rollupOptions: {
-      input: {
-        index: "index.html",
-        login: "login.html",
-      },
-    },
-  },
-*/
 });
