@@ -1,4 +1,4 @@
 import { render } from "solid-js/web";
-import Login from "./Login";
+import Products from "./Products";
 
-render(() => Login, document.getElementById("app"));
+render(() => Products, document.getElementById("app"));
