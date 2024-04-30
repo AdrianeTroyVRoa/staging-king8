@@ -3,7 +3,7 @@ function MenuSec() {
     <section className="bg-blue-950 bg-cover bg-center flex items-center justify-center">
       <div className="flex flex-wrap container my-20">
         <div className="lg:w-1/4 sm:w-1/2 p-4">
-          <a href="#">
+          <a href="#visit">
             <div className="flex hover:bg-amber-400 p-9 rounded-lg border text-white hover:text-black hover:border-black">
               <div className="w-3/4">
                 <h1 className="font-extrabold xl:text-2xl m:text-xl">
@@ -39,7 +39,7 @@ function MenuSec() {
           </a>
         </div>
         <div className="lg:w-1/4 sm:w-1/2 p-4">
-          <a href="#">
+          <a href="#quality">
             <div className="flex hover:bg-amber-400 p-9 rounded-lg border text-white hover:text-black hover:border-black">
               <div className="w-3/4">
                 <h1 className="font-extrabold xl:text-2xl m:text-xl">
