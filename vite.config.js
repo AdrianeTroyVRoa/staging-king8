@@ -5,7 +5,7 @@ import htmlInject from "vite-plugin-html-inject";
 // import devtools from 'solid-devtools/vite';
 
 export default defineConfig({
-  root: 'src/pages/home',
+//  root: 'src/pages/home',
   plugins: [
     /* 
     Uncomment the following line to enable solid-devtools.

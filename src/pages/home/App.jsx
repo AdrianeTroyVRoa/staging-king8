@@ -3,6 +3,7 @@ import TopSec from "../../components/TopSec";
 import MenuSec from "../../components/MenuSec";
 import Visit from "../../components/Visit";
 import Video from "../../components/Video";
+import Contact from "../../components/Contact";
 
 function App() {
   return (
@@ -12,6 +13,7 @@ function App() {
       <MenuSec />
       <Visit />
       <Video />
+      <Contact />
     </div>
   );
 }

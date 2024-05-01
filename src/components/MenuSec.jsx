@@ -101,7 +101,7 @@ function MenuSec() {
           </a>
         </div>
         <div className="lg:w-1/4 sm:w-1/2 p-4">
-          <a href="#">
+          <a href="#contacts">
             <div className="flex hover:bg-amber-400 p-9 rounded-lg border text-white hover:text-black hover:border-black">
               <div className="w-3/4">
                 <h1 className="font-extrabold xl:text-2xl m:text-xl">

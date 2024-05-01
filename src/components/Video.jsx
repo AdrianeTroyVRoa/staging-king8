@@ -1,6 +1,6 @@
 import bg_vid from "../assets/quality.mp4";
 
-export default function Video() {
+function Video() {
   return (
     <section
       className="relative flex items-center justify-center h-screen overflow-hidden"
@@ -15,7 +15,7 @@ export default function Video() {
         <source src={bg_vid} type="video/mp4" />
         Your browser does not support the video tag.
       </video>
-      <div className="relative z-20 p-5 text-2xl text-black bg-amber-400 bg-opacity-75 bg-blur-lg rounded-xl text-lg max-w-2xl my-10">
+      <div className="relative z-10 p-5 text-2xl text-black bg-amber-400 bg-opacity-75 bg-blur-lg rounded-xl text-lg max-w-2xl my-10">
         <p className="font-bold text-2xl">
           Strength is the cornerstone of our plastic products. Whether it's for
           industrial applications, packaging solutions, or consumer goods, our
@@ -29,3 +29,5 @@ export default function Video() {
     </section>
   );
 }
+
+export default Video;
