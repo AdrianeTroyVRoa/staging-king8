@@ -1,6 +1,6 @@
 function Footer(){
     return(
-        <footer className="bg-zinc-300 py-8 bottom-0 w-screen sm:bottom-0 lg:bottom-0 relative">
+        <footer className="bg-zinc-300 py-8 bottom-0 w-screen xs:bottom-0 sm:bottom-0 lg:bottom-0 relative">
             <div className="container mx-auto max-w-screen-lg justify-between">
                 <div className="flex justify-between">
                     <ul className="flex flex-col justify-between text-center text-sm  text-blue-950 left-8 h-24 w-48 sm:mb-4 ">
