@@ -1,4 +1,5 @@
-import Footer from "./Footer";
+import Footer from "../../components/Footer";
+import Header from "../../components/Header";
 import header from "./assets/Header_Sample.png";
 import Header from "./components/Header";
 

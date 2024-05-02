@@ -4,7 +4,7 @@ function Header() {
   const menuItems = ["HOME", "PRODUCTS", "ABOUT US", "CONTACT US"];
 
   return (
-    <nav className="bg-zinc-100 px-4 lg:px-6 py-2.5">
+    <nav className="bg-zinc-100 px-4 lg:px-6 py-2.5 fixed w-full top-0 z-20">
       <div className="flex flex-wrap text-blue-950 justify-between items-center mx-auto max-w-screen-xl text-sm">
         <a href="/" className="flex items-center">
           <img
