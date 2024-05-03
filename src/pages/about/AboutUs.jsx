@@ -1,8 +1,8 @@
 
 
+import header from "../../assets/product-7.png";
 import Footer from "../../components/Footer";
 import Header from "../../components/Header";
-import header from "./assets/Header_Sample.png";
 
 function About(){
     return(

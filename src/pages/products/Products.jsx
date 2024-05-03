@@ -1,19 +1,20 @@
-import Footer from "./Footer";
-import Header from "./Header";
-import basin from "./assets/Basin_King8.png";
-import bottle from "./assets/Bottle_King8.png";
-import chair from "./assets/Chairs_King8.png";
-import clip from "./assets/Clip_King8.png";
-import gallon from "./assets/Gallon_King8.png";
-import header from "./assets/Header_Sample.png";
-import pipes from "./assets/Pipes_King8.png";
+import basin from "../../assets/Basin_King8.png";
+import bottle from "../../assets/Bottle_King8.png";
+import chair from "../../assets/Chairs_King8.png";
+import clip from "../../assets/Clip_King8.png";
+import gallon from "../../assets/Gallon_King8.png";
+import pipes from "../../assets/Pipes_King8.png";
+import header from "../../assets/product-7.png";
+import Footer from "../../components/Footer";
+import Header from "../../components/Header";
+import "../../style/output.css";
 
 function Products() {
     return(
         <div className="relative bg-zinc-100 w-full h-full sm:w-full sm:h-screen">
             <Header/>
             
-            <div className="w-screen h-72 relative bg-stone-950">
+            <div className="w-screen h-72 relative bg-stone-950 mt-24">
                 <div className="w-screen h-24 font-extrabold top-20 flex justify-center items-center text-zinc-100 text-5xl absolute z-10">PRODUCTS</div>
                 <div className="w-screen h-24 font-normal top-40 text-center text-zinc-100 md:text-2xl sm:text-xl absolute  z-10">Check out our quality made products! Inquire now for more!</div>
                 <img className="w-screen h-72 opacity-35 absolute" src={header}/>
