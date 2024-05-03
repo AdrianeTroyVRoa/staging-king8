@@ -1,13 +1,12 @@
+import header from "../../assets/product-7.png";
 import Footer from "../../components/Footer";
 import Header from "../../components/Header";
-import header from "./assets/Header_Sample.png";
-import Header from "./components/Header";
 
 function About(){
     return(
         <div className="relative bg-zinc-100 w-screen h-screen">
             <Header/>
-            <div className="w-screen h-72 relative bg-stone-950">
+            <div className="w-screen h-72 relative bg-stone-950 mt-24">
                 <div className="w-screen h-24 font-extrabold mt-24 flex justify-center items-center text-zinc-100 text-5xl absolute z-10 ">ABOUT US</div>
                     <img className="w-screen h-72 opacity-35" src={header}/>
             </div>
