@@ -15,8 +15,8 @@ function Visit() {
               ></iframe>
           </div>
             <div className="w-full text-blue-950 ml-20 container">
-              <h1 className="font-bold text-5xl pb-10 mb-10">VISIT OUR OFFICE</h1>
-              <p className="text-lg text-justify mt-10">
+              <h1 className="font-bold text-5xl pb-10 mt-10 mb-10 ml-5">VISIT OUR OFFICE</h1>
+              <p className="text-lg text-justify mt-10 ml-5">
                 Discover genuine quality plastics crafted right here in the heart of
                 Cagayan de Oro, Philippines. Nestled within the bustling district of
                 Baloy, our manufacturing hub at Bldg 104 Kimwa is more than just an
