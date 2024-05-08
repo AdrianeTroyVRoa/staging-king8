@@ -17,19 +17,44 @@ const signupValidation = [
   body("password").isLength({ min: 8 }).escape().notEmpty(),
 ];
 
+//register
 async function addCustomer(theUser) {
-  const newUser = await createUser({
-    email: theUser.email,
-    mobile_num: theUser.mobile_number,
-    first_name: theUser.first_name,
-    last_name: theUser.last_name,
-    password: theUser.password,
-    role: "CUSTOMER",
-  });
-  const user = await getUserById(newUser.id);
-  console.log(user);
+  try {
+    const newUser = await createUser({
+      email: theUser.email,
+      mobile_num: theUser.mobile_number,
+      first_name: theUser.first_name,
+      last_name: theUser.last_name,
+      password: theUser.password,
+      role: "CUSTOMER",
+    });
+    const user = await getUserById(newUser.id);
+    console.log(user);
+  } catch (error) {
+    return new Error("Failed to process data: " + error.message);
+  }
 }
 
+//mobile_number transformation
+function transformNumber(mobile_number) {
+  let formatted_mobile_number = "";
+  let isAccordingToFormat = false;
+
+  for (const digit of mobile_number) {
+    if (isAccordingToFormat) {
+      formatted_mobile_number += digit;
+    } else {
+      if (digit == 9) {
+        isAccordingToFormat = true;
+        formatted_mobile_number += digit;
+      } else {
+        continue;
+      }
+    }
+  }
+}
+
+//registration proper
 router.post("/submit-register", signupValidation, (req, res) => {
   const errorSignup = validationResult(req);
 
@@ -38,23 +63,29 @@ router.post("/submit-register", signupValidation, (req, res) => {
     return;
   }
 
+  const mobile_number = req.body.mobile_number;
+  transformNumber(mobile_number);
+  password = req.body.password
+  confPass = req.body.confirm_password
+
   const newCustomer = {
-    "first_name" : req.body.first_name,
-    "last_name" : req.body.last_name,
-    "email" : req.body.email,
-    "mobile_number" : req.body.mobile_number,
-    "password" : req.body.password
-  }
+    first_name: req.body.first_name,
+    last_name: req.body.last_name,
+    email: req.body.email,
+    mobile_number: formatted_mobile_number,
+    password: req.body.password,
+  };
 
   try {
-   addCustomer(newCustomer) 
+    addCustomer(newCustomer);
   } catch (error) {
-   return res.send('error occured') 
+    console.log(error);
+    return res.send("error occured");
   }
 
   console.log(newCustomer);
 
-  return res.send('signup successful');
+  return res.send("signup successful");
 });
 
 module.exports = router;
