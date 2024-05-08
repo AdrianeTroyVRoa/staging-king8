@@ -15,6 +15,14 @@ async function getUserById(userId) {
   });
 }
 
+async function getUserByEmail(email) {
+  return prisma.user.findUnique({
+    where: {
+      email: email,
+    },
+  });
+}
+
 async function main() {
   // ... you will write your Prisma Client queries here
   const allUsers = await prisma.user.findMany();
@@ -24,4 +32,5 @@ async function main() {
 module.exports = {
   createUser,
   getUserById,
+  getUserByEmail,
 };

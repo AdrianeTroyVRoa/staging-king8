@@ -1,5 +1,9 @@
 //db prisma
-const { createUser, getUserById } = require("../prisma/queries/userQueries");
+const {
+  createUser,
+  getUserById,
+  getUserByEmail,
+} = require("../prisma/queries/userQueries");
 
 const { Router } = require("express");
 
@@ -65,8 +69,8 @@ router.post("/submit-register", signupValidation, (req, res) => {
 
   const mobile_number = req.body.mobile_number;
   transformNumber(mobile_number);
-  password = req.body.password
-  confPass = req.body.confirm_password
+  password = req.body.password;
+  confPass = req.body.confirm_password;
 
   const newCustomer = {
     first_name: req.body.first_name,
@@ -86,6 +90,33 @@ router.post("/submit-register", signupValidation, (req, res) => {
   console.log(newCustomer);
 
   return res.send("signup successful");
+});
+
+async function matchPassKey(email) {
+  try {
+    const user = await getUserByEmail(email);
+    if (user) {
+      return user.password;
+    }
+    return null;
+  } catch (err) {
+    throw err;
+  }
+}
+
+//login proper
+router.post("/login-user", async (req, res) => {
+  const email = req.body.email;
+  const pass = req.body.password;
+  const passKeyToMatch = await matchPassKey(email);
+
+  console.log(passKeyToMatch);
+  if (passKeyToMatch == pass) {
+    return res.send("Logged In");
+  }
+
+
+  return res.status(400).send("Not matching any accounts.");
 });
 
 module.exports = router;
