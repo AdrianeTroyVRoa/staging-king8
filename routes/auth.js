@@ -20,7 +20,7 @@ const signupValidation = [
 async function addCustomer(theUser) {
   const newUser = await createUser({
     email: theUser.email,
-    mobile_num: theUser.mobile_num,
+    mobile_num: theUser.mobile_number,
     first_name: theUser.first_name,
     last_name: theUser.last_name,
     password: theUser.password,
@@ -52,7 +52,7 @@ router.post("/submit-register", signupValidation, (req, res) => {
    return res.send('error occured') 
   }
 
-  console.log([first_name, last_name, email, mobile_number, password]);
+  console.log(newCustomer);
 
   return res.send('signup successful');
 });
