@@ -13,24 +13,6 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-//model Post {
-//  id        Int      @id @default(autoincrement())
-//  createdAt DateTime @default(now())
-//  updatedAt DateTime @updatedAt
-//  title     String   @db.VarChar(255)
-//  content   String?
-//  published Boolean  @default(false)
-//  author    User     @relation(fields: [authorId], references: [id])
-//  authorId  Int
-//}
-//
-//model Profile {
-//  id     Int     @id @default(autoincrement())
-//  bio    String?
-//  user   User    @relation(fields: [userId], references: [id])
-//  userId Int     @unique
-//}
-
 model User {
   id         Int         @id @default(autoincrement())
   email      String      @unique
@@ -38,18 +20,28 @@ model User {
   first_name String
   last_name  String
   password   String?
-  role       Role
-  isVerified Boolean     @default(false)
-  ///posts   Post[]
-  ///profile Profile?
+  createdAt  DateTime    @default(now())
+  updatedAt  DateTime    @updatedAt @default(now()) 
+  Customer   Customer[]
+  Employee   Employee[]
   Wishlist   Wishlist[]
   Inquiries  Inquiries[]
 }
 
-enum Role {
-  ADMIN
-  EMPLOYEE
-  CUSTOMER
+model Customer {
+  id         Int         @id @default(autoincrement())
+  isVerified Boolean     @default(false)
+  Wishlist   Wishlist[]
+  Inquiries  Inquiries[]
+  user_id    User        @relation(fields: [userId], references: [id])
+  userId     Int
+}
+
+model Employee {
+  id          Int    @id @default(autoincrement())
+  employee_id String @unique
+  user_id     User   @relation(fields: [userId], references: [id])
+  userId      Int
 }
 
 model Product {
@@ -63,24 +55,28 @@ model Product {
 }
 
 model Wishlist {
-  id         Int      @id @default(autoincrement())
-  user_id    User     @relation(fields: [userId], references: [id])
-  product_id Product  @relation(fields: [productId], references: [id])
-  createdAt  DateTime @default(now())
-  updatedAt  DateTime @updatedAt
+  id         Int       @id @default(autoincrement())
+  user_id    User      @relation(fields: [userId], references: [id])
+  product_id Product   @relation(fields: [productId], references: [id])
+  createdAt  DateTime  @default(now())
+  updatedAt  DateTime  @updatedAt
   userId     Int
   productId  Int
+  Customer   Customer? @relation(fields: [customerId], references: [id])
+  customerId Int?
 }
 
 model Inquiries {
-  id             Int      @id @default(autoincrement())
-  user_id        User     @relation(fields: [userId], references: [id])
-  product_id     Product  @relation(fields: [productId], references: [id])
-  inquiredAt     DateTime @default(now())
+  id             Int       @id @default(autoincrement())
+  user_id        User      @relation(fields: [userId], references: [id])
+  product_id     Product   @relation(fields: [productId], references: [id])
+  inquiredAt     DateTime  @default(now())
   additional_msg String?
   status         Status
   userId         Int
   productId      Int
+  Customer       Customer? @relation(fields: [customerId], references: [id])
+  customerId     Int?
 }
 
 enum Status {

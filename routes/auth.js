@@ -1,11 +1,14 @@
 //db prisma
 const {
-  createUser,
-  getUserById,
-  getUserByEmail,
-} = require("../prisma/queries/userQueries");
+  createCustomer,
+  getCustomerById,
+  getCustomerByEmail,
+} = require("../prisma/queries/customerQueries");
+
+const { createUser, getUserById } = require("../prisma/queries/userQueries");
 
 const { Router } = require("express");
+const { parsePhoneNumber, isValidNumber } = require("libphonenumber-js");
 
 const router = Router();
 
@@ -22,39 +25,24 @@ const signupValidation = [
 ];
 
 //register
-async function addCustomer(theUser) {
+async function addCustomer(customer) {
   try {
     const newUser = await createUser({
-      email: theUser.email,
-      mobile_num: theUser.mobile_number,
-      first_name: theUser.first_name,
-      last_name: theUser.last_name,
-      password: theUser.password,
-      role: "CUSTOMER",
+      email: customer.email,
+      mobile_num: customer.mobile_number,
+      first_name: customer.first_name,
+      last_name: customer.last_name,
+      password: customer.password,
+    });
+    const newCustomer = await createCustomer({
+      userId: newUser.id,
     });
     const user = await getUserById(newUser.id);
+    const custom = await getCustomerById(newCustomer.id);
     console.log(user);
+    console.log(custom);
   } catch (error) {
     return new Error("Failed to process data: " + error.message);
-  }
-}
-
-//mobile_number transformation
-function transformNumber(mobile_number) {
-  let formatted_mobile_number = "";
-  let isAccordingToFormat = false;
-
-  for (const digit of mobile_number) {
-    if (isAccordingToFormat) {
-      formatted_mobile_number += digit;
-    } else {
-      if (digit == 9) {
-        isAccordingToFormat = true;
-        formatted_mobile_number += digit;
-      } else {
-        continue;
-      }
-    }
   }
 }
 
@@ -67,8 +55,16 @@ router.post("/submit-register", signupValidation, (req, res) => {
     return;
   }
 
-  const mobile_number = req.body.mobile_number;
-  transformNumber(mobile_number);
+  const mobileNumber = req.body.mobile_number;
+  const isValidPHNum = isValidNumber(mobileNumber);
+
+  if (!isValidPHNum) {
+    return res.send("Not a valid PH phone number");
+  }
+
+  const parsedNumber = parsePhoneNumber(mobileNumber, "PH");
+  const transformMobileNumber = parsedNumber.nationalNumber;
+
   password = req.body.password;
   confPass = req.body.confirm_password;
 
@@ -76,7 +72,7 @@ router.post("/submit-register", signupValidation, (req, res) => {
     first_name: req.body.first_name,
     last_name: req.body.last_name,
     email: req.body.email,
-    mobile_number: formatted_mobile_number,
+    mobile_number: transformMobileNumber,
     password: req.body.password,
   };
 
@@ -87,14 +83,14 @@ router.post("/submit-register", signupValidation, (req, res) => {
     return res.send("error occured");
   }
 
-  console.log(newCustomer);
+  //console.log(newCustomer);
 
   return res.send("signup successful");
 });
 
 async function matchPassKey(email) {
   try {
-    const user = await getUserByEmail(email);
+    const user = await getCustomerByEmail(email);
     if (user) {
       return user.password;
     }
@@ -110,11 +106,10 @@ router.post("/login-user", async (req, res) => {
   const pass = req.body.password;
   const passKeyToMatch = await matchPassKey(email);
 
-  console.log(passKeyToMatch);
+  //console.log(passKeyToMatch);
   if (passKeyToMatch == pass) {
     return res.send("Logged In");
   }
-
 
   return res.status(400).send("Not matching any accounts.");
 });
