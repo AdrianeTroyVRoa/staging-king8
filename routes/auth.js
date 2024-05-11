@@ -2,10 +2,13 @@
 const {
   createCustomer,
   getCustomerById,
-  getCustomerByEmail,
 } = require("../prisma/queries/customerQueries");
 
-const { createUser, getUserById } = require("../prisma/queries/userQueries");
+const {
+  createUser,
+  getUserById,
+  getUserByEmail,
+} = require("../prisma/queries/userQueries");
 
 const { Router } = require("express");
 const { parsePhoneNumber, isValidNumber } = require("libphonenumber-js");
@@ -90,7 +93,7 @@ router.post("/submit-register", signupValidation, (req, res) => {
 
 async function matchPassKey(email) {
   try {
-    const user = await getCustomerByEmail(email);
+    const user = await getUserByEmail(email);
     if (user) {
       return user.password;
     }
