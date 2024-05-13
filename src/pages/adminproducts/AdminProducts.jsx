@@ -1,3 +1,4 @@
+import { createSignal } from "solid-js";
 import basin from "../../assets/Basin_King8.png";
 import bottle from "../../assets/Bottle_King8.png";
 import chairs from "../../assets/Chairs_King8.png";
@@ -7,6 +8,13 @@ import pipes from "../../assets/Pipes_King8.png";
 import AdminHeader from "../../components/AdminHeader";
 
 export default function AdminProducts (){
+    const [isEditModalOpen, setIsEditModalOpen] = createSignal(false);
+    const [isAddModalOpen, setIsAddModalOpen] = createSignal(false);
+    const openEditWindow = () => setIsEditModalOpen(true);
+    const closeEditWindow = () => setIsEditModalOpen(false);
+    const openAddWindow = () => setIsAddModalOpen(true);
+    const closeAddWindow = () => setIsAddModalOpen(false);
+
     return(
         <div className="relative bg-zinc-100 w-full h-full sm:w-full sm:h-screen">
             <AdminHeader/>
@@ -20,7 +28,7 @@ export default function AdminProducts (){
                                     <h3 className="font-extrabold text-base text-blue-950">Product Editor</h3>
                                 </div>
                                 <div className="relative w-full px-4 max-w-full flex-grow flex-1 text-right">
-                                    <button className="bg-blue-950 text-zinc-100 active:bg-blue-950 text-xs font-bold px-3 py-1 rounded outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150" type="button">Add product</button>
+                                    <button onClick={openAddWindow} className="bg-blue-950 text-zinc-100 active:bg-blue-950 text-xs font-bold px-3 py-1 rounded outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150" type="button">Add product</button>
                                 </div>
                             </div>
                         </div>
@@ -44,7 +52,9 @@ export default function AdminProducts (){
                                         </th>
                                         <th className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4 text-left text-blueGray-700">Pipes</th>
                                         <td className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4">Lorem ipsum dolor sit amet, consectetur adipiscing elit</td>
-                                        <td className="border-t-0 px-6 align-center border-l-0 border-r-0 text-xs underline whitespace-nowrap p-4">Edit</td>
+                                        <td>
+                                            <button onClick={openEditWindow} className="border-t-0 px-6 align-center border-l-0 border-r-0 text-xs underline whitespace-nowrap p-4">Edit</button>
+                                        </td>
                                     </tr>
                                     <tr>
                                         <th className="border-t-0 px-6 align-middle border-l-0 border-r-0  whitespace-nowrap p-4">
@@ -52,7 +62,9 @@ export default function AdminProducts (){
                                             </th>
                                         <th className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4 text-left text-blueGray-700">Chairs</th>
                                         <td className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4">Lorem ipsum dolor sit amet, consectetur adipiscing elit</td>
-                                        <td className="border-t-0 px-6 align-center border-l-0 border-r-0 text-xs underline whitespace-nowrap p-4">Edit</td>
+                                        <td>
+                                            <button className="border-t-0 px-6 align-center border-l-0 border-r-0 text-xs underline whitespace-nowrap p-4">Edit</button>
+                                        </td>
                                     </tr>
                                     <tr>
                                         <th className="border-t-0 px-6 align-middle border-l-0 border-r-0  whitespace-nowrap p-4">
@@ -60,7 +72,9 @@ export default function AdminProducts (){
                                         </th>
                                         <th className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4 text-left text-blueGray-700">Water Gallon</th>
                                         <td className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4">Lorem ipsum dolor sit amet, consectetur adipiscing elit</td>
-                                        <td className="border-t-0 px-6 align-center border-l-0 border-r-0 text-xs underline whitespace-nowrap p-4">Edit</td>
+                                        <td>
+                                            <button className="border-t-0 px-6 align-center border-l-0 border-r-0 text-xs underline whitespace-nowrap p-4">Edit</button>
+                                        </td>
                                     </tr>
                                     <tr>
                                         <th className="border-t-0 px-6 align-middle border-l-0 border-r-0  whitespace-nowrap p-4">
@@ -68,7 +82,9 @@ export default function AdminProducts (){
                                         </th>
                                         <th className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4 text-left text-blueGray-700">Basins</th>
                                         <td className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4">Lorem ipsum dolor sit amet, consectetur adipiscing elit</td>
-                                        <td className="border-t-0 px-6 align-center border-l-0 border-r-0 text-xs underline whitespace-nowrap p-4">Edit</td>
+                                        <td>
+                                            <button className="border-t-0 px-6 align-center border-l-0 border-r-0 text-xs underline whitespace-nowrap p-4">Edit</button>
+                                        </td>
                                     </tr>
                                     <tr>
                                         <th className="border-t-0 px-6 align-middle border-l-0 border-r-0  whitespace-nowrap p-4">
@@ -76,7 +92,9 @@ export default function AdminProducts (){
                                         </th>
                                         <th className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4 text-left text-blueGray-700">Laundry Clips</th>
                                         <td className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4">Lorem ipsum dolor sit amet, consectetur adipiscing elit</td>
-                                        <td className="border-t-0 px-6 align-center border-l-0 border-r-0 text-xs underline whitespace-nowrap p-4">Edit</td>
+                                        <td>
+                                            <button className="border-t-0 px-6 align-center border-l-0 border-r-0 text-xs underline whitespace-nowrap p-4">Edit</button>
+                                        </td>
                                     </tr>
                                     <tr>
                                         <th className="border-t-0 px-6 align-middle border-l-0 border-r-0  whitespace-nowrap p-4">
@@ -84,10 +102,117 @@ export default function AdminProducts (){
                                         </th>
                                         <th className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4 text-left text-blueGray-700">Recyclable Bottles</th>
                                         <td className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4">Lorem ipsum dolor sit amet, consectetur adipiscing elit</td>
-                                        <td className="border-t-0 px-6 align-center border-l-0 border-r-0 text-xs underline whitespace-nowrap p-4">Edit</td>
+                                        <td>
+                                            <button className="border-t-0 px-6 align-center border-l-0 border-r-0 text-xs underline whitespace-nowrap p-4">Edit</button>
+                                        </td>
                                     </tr>
                                 </tbody>
                             </table>
+                            {isAddModalOpen() && (
+                                                <div class="fixed top-0 left-0 w-full h-full px-4 flex justify-center items-center">
+                                                    <div className="fixed top-0 left-0 w-full h-full bg-black opacity-50"/>
+        
+                                                    <div class="absolute bg-gray-100 rounded-lg p-8 shadow-lg">
+                                                        <div class="modal-content flex justify-center items-center bg-zinc-100">
+                                                            <form action="#" class="w-full">
+                                                                <div class="grid gap-4 mb-4 sm:grid-cols-2">
+                                                                    <h3 class="text-lg font-semibold text-gray-900">
+                                                                        Add product
+                                                                    </h3>
+                                                                    <button type="button" onClick={closeAddWindow} class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm p-1.5 ml-auto inline-flex items-center" data-modal-toggle="defaultModal">
+                                                                        <svg aria-hidden="true" class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"></path></svg>
+                                                                        <span class="sr-only">Close modal</span>
+                                                                    </button>
+                                                                    <div>
+                                                                        <label for="name" class="block mb-2 text-sm font-medium text-gray-900 ">Name</label>
+                                                                        <input type="text" name="firstname" id="first_name" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5" placeholder="Type product name" required=""/>
+                                                                    </div>
+                                                                    <div>
+                                                                        <label for="brand" class="block mb-2 text-sm font-medium text-gray-900   ">Last Name</label>
+                                                                        <input type="text" name="lastname" id="last_name" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5" placeholder="Type last name" required=""/>
+                                                                    </div>
+                                                                    <div>
+                                                                        <label for="price" class="block mb-2 text-sm font-medium text-gray-900">Employee ID</label>
+                                                                        <input type="text" name="employeeid" id="employee_id" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 " placeholder="Type employee number" required=""/>
+                                                                    </div>
+                                                                    <div>
+                                                                        <label for="price" class="block mb-2 text-sm font-medium text-gray-900">Email address</label>
+                                                                        <input type="text" name="email" id="email" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 " placeholder="Type email address" required=""/>
+                                                                    </div>
+                                                                    <div>
+                                                                        <label for="price" class="block mb-2 text-sm font-medium text-gray-900">Mobile number</label>
+                                                                        <input type="text" name="mobilenumber" id="number" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 " placeholder="Type mobile number" required=""/>
+                                                                    </div>
+                                                                    
+                                                                </div>
+                                                                <div>
+                                                                    <button type="submit" class="text-zinc-100 inline-flex items-center bg-gray-700 hover:bg-primary-800 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm  py-2.5 mt-2 justify-center w-full">
+                                                                        Add product
+                                                                    </button>
+                                                                </div>
+                                                            </form>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            )}
+                                            {isEditModalOpen() && (
+                                                <div class="fixed top-0 left-0 w-full h-full px-4 flex justify-center items-center">
+                                                    <div className="fixed top-0 left-0 w-full h-full bg-black opacity-50"/>
+        
+                                                    <div class="absolute bg-gray-100 rounded-lg p-8 shadow-lg">
+                                                        <div class="modal-content flex justify-center items-center bg-zinc-100">
+                                                            <form action="#" class="w-full">
+                                                                <div class="grid gap-4 mb-4 sm:grid-cols-2">
+                                                                    <h3 class="text-lg font-semibold text-gray-900">
+                                                                        Edit account
+                                                                    </h3>
+                                                                    <button type="button" onClick={closeEditWindow} class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm p-1.5 ml-auto inline-flex items-center" data-modal-toggle="defaultModal">
+                                                                        <svg aria-hidden="true" class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"></path></svg>
+                                                                        <span class="sr-only">Close modal</span>
+                                                                    </button>
+                                                                    <div>
+                                                                        <label for="name" class="block mb-2 text-sm font-medium text-gray-900 ">First Name</label>
+                                                                        <input type="text" name="firstname" id="first_name" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5" placeholder="Default first name" required=""/>
+                                                                    </div>
+                                                                    <div>
+                                                                        <label for="brand" class="block mb-2 text-sm font-medium text-gray-900   ">Last Name</label>
+                                                                        <input type="text" name="lastname" id="last_name" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5" placeholder="Default last name" required=""/>
+                                                                    </div>
+                                                                    <div>
+                                                                        <label for="price" class="block mb-2 text-sm font-medium text-gray-900">Employee ID</label>
+                                                                        <input type="text" name="employeeid" id="employee_id" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 " placeholder="Default employee number" required=""/>
+                                                                    </div>
+                                                                    <div>
+                                                                        <label for="price" class="block mb-2 text-sm font-medium text-gray-900">Email address</label>
+                                                                        <input type="text" name="email" id="email" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 " placeholder="Default email address" required=""/>
+                                                                    </div>
+                                                                    <div>
+                                                                        <label for="price" class="block mb-2 text-sm font-medium text-gray-900">Mobile number</label>
+                                                                        <input type="text" name="mobilenumber" id="number" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 " placeholder="Default mobile number" required=""/>
+                                                                    </div>
+                                                                    
+                                                                </div>
+                                                                <div>
+                                                                    <button type="submit" class="text-zinc-100 inline-flex items-center bg-gray-700 hover:bg-primary-800 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm  py-2.5 mt-2 justify-center w-full">
+                                                                        Confirm changes
+                                                                    </button>
+                                                                </div>
+                                                                <div class="grid gap-4 mb-2 sm:grid-cols-2 mt-4">
+                                                                    <h3 class="text-md font-semibold text-blue-950 mt-4">Account control</h3>
+                                                                </div>
+                                                                <button type="submit" class="text-red-700 inline-flex items-center bg-zinc-100 border border-red-700 hover:bg-primary-800 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-3 py-2.5 mr-4 text-center">
+                                                                    Restrict access
+                                                                </button>
+
+                                                                <button type="submit" class="text-zinc-100 inline-flex items-center bg-red-700 hover:bg-primary-800 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-3 py-2.5 mr-4 text-center">
+                                                                    Delete account
+                                                                </button>
+                                                            </form>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            )}
+
                         </div>
                     </div>
                 </div>
