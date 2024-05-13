@@ -199,8 +199,11 @@ export default function AdminProducts (){
                                                                     </div>
                                                                 </div>
                                                                 <div>
-                                                                    <button type="submit" class="text-zinc-100 inline-flex items-center bg-gray-700 hover:bg-primary-800 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm  py-2.5 mt-2 justify-center w-full">
+                                                                    <button type="submit" class="text-zinc-100 inline-flex  items-center bg-gray-700 hover:bg-primary-800 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm  px-4 py-2.5 justify-center">
                                                                         Confirm changes
+                                                                    </button>
+                                                                    <button type="submit" class="text-zinc-100 inline-flex items-center bg-red-700 hover:bg-primary-800 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-4 py-2.5 ml-4 justify-center">
+                                                                        Delete product
                                                                     </button>
                                                                 </div>
                                                             </form>
