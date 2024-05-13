@@ -109,7 +109,7 @@ export default function AdminProducts (){
                                 </tbody>
                             </table>
                             {isAddModalOpen() && (
-                                                <div class="fixed top-0 left-0 w-full h-full px-4 flex justify-center items-center">
+                                                <div class="fixed top-0 left-0 w-full sm:h-full h-full px-4 flex justify-center items-center">
                                                     <div className="fixed top-0 left-0 w-full h-full bg-black opacity-50"/>
         
                                                     <div class="absolute bg-gray-100 rounded-lg p-8 shadow-lg">
@@ -123,7 +123,7 @@ export default function AdminProducts (){
                                                                         <svg aria-hidden="true" class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"></path></svg>
                                                                         <span class="sr-only">Close modal</span>
                                                                     </button>
-                                                                    <div className="sm:col-span-2 -mt-7">
+                                                                    <div className="-mt-6">
                                                                         <div class="relative w-48 h-48 mt-8 overflow-hidden bg-zinc-100 border border-gray-300 rounded-t-lg"></div>
                                                                         <label class="text-blue-950 inline-flex border border-gray-300 justify-center items-center bg-gray-200 hover:bg-amber-400 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-b-lg text-sm w-48 py-2.5 text-center" for="user_avatar">Upload picture
                                                                         </label>
@@ -132,15 +132,16 @@ export default function AdminProducts (){
                                                                     <div>
                                                                         <label for="name" class="block mb-2 text-sm font-medium text-gray-900 ">Product Name</label>
                                                                         <input type="text" name="firstname" id="first_name" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5" placeholder="Type product name" required=""/>
+                                                                        <div className="mt-4">
+                                                                            <label for="brand" class="block mb-2 text-sm font-medium text-gray-900   ">Quantity</label>
+                                                                            <input type="text" name="lastname" id="last_name" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5" placeholder="Type quantity" required=""/>
+                                                                        </div>
+                                                                        <div className="mt-4">
+                                                                            <label for="price" class="block mb-2 text-sm font-medium text-gray-900">Variations</label>
+                                                                            <input type="text" name="employeeid" id="employee_id" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 " placeholder="Type product variants" required=""/>
+                                                                        </div>
                                                                     </div>
-                                                                    <div>
-                                                                        <label for="brand" class="block mb-2 text-sm font-medium text-gray-900   ">Quantity</label>
-                                                                        <input type="text" name="lastname" id="last_name" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5" placeholder="Type quantity" required=""/>
-                                                                    </div>
-                                                                    <div>
-                                                                        <label for="price" class="block mb-2 text-sm font-medium text-gray-900">Variations</label>
-                                                                        <input type="text" name="employeeid" id="employee_id" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 " placeholder="Type product variants" required=""/>
-                                                                    </div>
+                                                                    
                                                                     <div className="sm:col-span-2">
                                                                         <label for="description" className="block mb-2 text-md font-medium text-blue-950">Description</label>
                                                                         <textarea id="description" rows="6" className="block p-2.5 w-full text-sm text-blue-950 bg-grey-50 rounded-lg border border-gray-300 focus:ring-primary-500 focus:border-primary-500" placeholder="Your description here"></textarea>
@@ -158,13 +159,13 @@ export default function AdminProducts (){
                                                 </div>
                                             )}
                                             {isEditModalOpen() && (
-                                                <div class="fixed top-0 left-0 w-full h-full px-4 flex justify-center items-center">
+                                                <div class="lg:fixed md:fixed top-0 left-0 w-full h-full px-4 flex justify-center items-center">
                                                     <div className="fixed top-0 left-0 w-full h-full bg-black opacity-50"/>
         
-                                                    <div class="absolute bg-gray-100 rounded-lg p-8 shadow-lg">
+                                                    <div class="absolute bg-gray-100 rounded-lg p-8 shadow-lg max-w-lg w-full">
                                                         <div class="modal-content flex justify-center items-center bg-zinc-100">
                                                             <form action="#" class="w-full">
-                                                                <div class="grid gap-4 mb-4 sm:grid-cols-2">
+                                                                <div class="grid gap-4 mb-4 md:grid-cols-2 sm:grid-cols-2">
                                                                     <h3 class="text-lg font-semibold text-gray-900">
                                                                         Edit product
                                                                     </h3>
@@ -172,7 +173,7 @@ export default function AdminProducts (){
                                                                         <svg aria-hidden="true" class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"></path></svg>
                                                                         <span class="sr-only">Close modal</span>
                                                                     </button>
-                                                                    <div className="sm:col-span-2 -mt-7">
+                                                                    <div className="-mt-6">
                                                                         <div class="relative w-48 h-48 mt-8 overflow-hidden bg-zinc-100 border border-gray-300 rounded-t-lg"></div>
                                                                         <label class="text-blue-950 inline-flex border border-gray-300 justify-center items-center bg-gray-200 hover:bg-amber-400 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-b-lg text-sm w-48 py-2.5 text-center" for="user_avatar">Upload picture
                                                                         </label>
@@ -181,15 +182,17 @@ export default function AdminProducts (){
                                                                     <div>
                                                                         <label for="name" class="block mb-2 text-sm font-medium text-gray-900 ">Product Name</label>
                                                                         <input type="text" name="firstname" id="first_name" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5" placeholder="Type product name" required=""/>
+                                                                        <div className="mt-4">
+                                                                            <label for="brand" class="block mb-2 text-sm font-medium text-gray-900   ">Quantity</label>
+                                                                            <input type="text" name="lastname" id="last_name" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5" placeholder="Type quantity" required=""/>
+                                                                        </div>
+                                                                        <div className="mt-4">
+                                                                            <label for="price" class="block mb-2 text-sm font-medium text-gray-900">Variations</label>
+                                                                            <input type="text" name="employeeid" id="employee_id" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 " placeholder="Type product variants" required=""/>
+                                                                        </div>
                                                                     </div>
-                                                                    <div>
-                                                                        <label for="brand" class="block mb-2 text-sm font-medium text-gray-900   ">Quantity</label>
-                                                                        <input type="text" name="lastname" id="last_name" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5" placeholder="Type quantity" required=""/>
-                                                                    </div>
-                                                                    <div>
-                                                                        <label for="price" class="block mb-2 text-sm font-medium text-gray-900">Variations</label>
-                                                                        <input type="text" name="employeeid" id="employee_id" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 " placeholder="Type product variants" required=""/>
-                                                                    </div>
+                                                                    
+                                                                    
                                                                     <div className="sm:col-span-2">
                                                                         <label for="description" className="block mb-2 text-md font-medium text-blue-950">Description</label>
                                                                         <textarea id="description" rows="6" className="block p-2.5 w-full text-sm text-blue-950 bg-grey-50 rounded-lg border border-gray-300 focus:ring-primary-500 focus:border-primary-500" placeholder="Your description here"></textarea>
