@@ -63,7 +63,7 @@ export default function AdminProducts (){
                                         <th className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4 text-left text-blueGray-700">Chairs</th>
                                         <td className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4">Lorem ipsum dolor sit amet, consectetur adipiscing elit</td>
                                         <td>
-                                            <button className="border-t-0 px-6 align-center border-l-0 border-r-0 text-xs underline whitespace-nowrap p-4">Edit</button>
+                                            <button onClick={openEditWindow} className="border-t-0 px-6 align-center border-l-0 border-r-0 text-xs underline whitespace-nowrap p-4">Edit</button>
                                         </td>
                                     </tr>
                                     <tr>
@@ -73,7 +73,7 @@ export default function AdminProducts (){
                                         <th className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4 text-left text-blueGray-700">Water Gallon</th>
                                         <td className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4">Lorem ipsum dolor sit amet, consectetur adipiscing elit</td>
                                         <td>
-                                            <button className="border-t-0 px-6 align-center border-l-0 border-r-0 text-xs underline whitespace-nowrap p-4">Edit</button>
+                                            <button onClick={openEditWindow} className="border-t-0 px-6 align-center border-l-0 border-r-0 text-xs underline whitespace-nowrap p-4">Edit</button>
                                         </td>
                                     </tr>
                                     <tr>
@@ -83,7 +83,7 @@ export default function AdminProducts (){
                                         <th className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4 text-left text-blueGray-700">Basins</th>
                                         <td className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4">Lorem ipsum dolor sit amet, consectetur adipiscing elit</td>
                                         <td>
-                                            <button className="border-t-0 px-6 align-center border-l-0 border-r-0 text-xs underline whitespace-nowrap p-4">Edit</button>
+                                            <button onClick={openEditWindow} className="border-t-0 px-6 align-center border-l-0 border-r-0 text-xs underline whitespace-nowrap p-4">Edit</button>
                                         </td>
                                     </tr>
                                     <tr>
@@ -93,7 +93,7 @@ export default function AdminProducts (){
                                         <th className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4 text-left text-blueGray-700">Laundry Clips</th>
                                         <td className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4">Lorem ipsum dolor sit amet, consectetur adipiscing elit</td>
                                         <td>
-                                            <button className="border-t-0 px-6 align-center border-l-0 border-r-0 text-xs underline whitespace-nowrap p-4">Edit</button>
+                                            <button onClick={openEditWindow} className="border-t-0 px-6 align-center border-l-0 border-r-0 text-xs underline whitespace-nowrap p-4">Edit</button>
                                         </td>
                                     </tr>
                                     <tr>
@@ -103,7 +103,7 @@ export default function AdminProducts (){
                                         <th className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4 text-left text-blueGray-700">Recyclable Bottles</th>
                                         <td className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4">Lorem ipsum dolor sit amet, consectetur adipiscing elit</td>
                                         <td>
-                                            <button className="border-t-0 px-6 align-center border-l-0 border-r-0 text-xs underline whitespace-nowrap p-4">Edit</button>
+                                            <button onClick={openEditWindow} className="border-t-0 px-6 align-center border-l-0 border-r-0 text-xs underline whitespace-nowrap p-4">Edit</button>
                                         </td>
                                     </tr>
                                 </tbody>
@@ -130,24 +130,20 @@ export default function AdminProducts (){
                                                                         <input class="hidden" id="user_avatar" type="file"/>
                                                                     </div>
                                                                     <div>
-                                                                        <label for="name" class="block mb-2 text-sm font-medium text-gray-900 ">Name</label>
+                                                                        <label for="name" class="block mb-2 text-sm font-medium text-gray-900 ">Product Name</label>
                                                                         <input type="text" name="firstname" id="first_name" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5" placeholder="Type product name" required=""/>
                                                                     </div>
                                                                     <div>
-                                                                        <label for="brand" class="block mb-2 text-sm font-medium text-gray-900   ">Last Name</label>
-                                                                        <input type="text" name="lastname" id="last_name" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5" placeholder="Type last name" required=""/>
+                                                                        <label for="brand" class="block mb-2 text-sm font-medium text-gray-900   ">Quantity</label>
+                                                                        <input type="text" name="lastname" id="last_name" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5" placeholder="Type quantity" required=""/>
                                                                     </div>
                                                                     <div>
-                                                                        <label for="price" class="block mb-2 text-sm font-medium text-gray-900">Employee ID</label>
-                                                                        <input type="text" name="employeeid" id="employee_id" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 " placeholder="Type employee number" required=""/>
+                                                                        <label for="price" class="block mb-2 text-sm font-medium text-gray-900">Variations</label>
+                                                                        <input type="text" name="employeeid" id="employee_id" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 " placeholder="Type product variants" required=""/>
                                                                     </div>
-                                                                    <div>
-                                                                        <label for="price" class="block mb-2 text-sm font-medium text-gray-900">Email address</label>
-                                                                        <input type="text" name="email" id="email" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 " placeholder="Type email address" required=""/>
-                                                                    </div>
-                                                                    <div>
-                                                                        <label for="price" class="block mb-2 text-sm font-medium text-gray-900">Mobile number</label>
-                                                                        <input type="text" name="mobilenumber" id="number" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 " placeholder="Type mobile number" required=""/>
+                                                                    <div className="sm:col-span-2">
+                                                                        <label for="description" className="block mb-2 text-md font-medium text-blue-950">Description</label>
+                                                                        <textarea id="description" rows="6" className="block p-2.5 w-full text-sm text-blue-950 bg-grey-50 rounded-lg border border-gray-300 focus:ring-primary-500 focus:border-primary-500" placeholder="Your description here"></textarea>
                                                                     </div>
                                                                     
                                                                 </div>
@@ -170,7 +166,7 @@ export default function AdminProducts (){
                                                             <form action="#" class="w-full">
                                                                 <div class="grid gap-4 mb-4 sm:grid-cols-2">
                                                                     <h3 class="text-lg font-semibold text-gray-900">
-                                                                        Edit account
+                                                                        Edit product
                                                                     </h3>
                                                                     <button type="button" onClick={closeEditWindow} class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm p-1.5 ml-auto inline-flex items-center" data-modal-toggle="defaultModal">
                                                                         <svg aria-hidden="true" class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"></path></svg>
@@ -183,26 +179,21 @@ export default function AdminProducts (){
                                                                         <input class="hidden" id="user_avatar" type="file"/>
                                                                     </div>
                                                                     <div>
-                                                                        <label for="name" class="block mb-2 text-sm font-medium text-gray-900 ">First Name</label>
-                                                                        <input type="text" name="firstname" id="first_name" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5" placeholder="Default first name" required=""/>
+                                                                        <label for="name" class="block mb-2 text-sm font-medium text-gray-900 ">Product Name</label>
+                                                                        <input type="text" name="firstname" id="first_name" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5" placeholder="Type product name" required=""/>
                                                                     </div>
                                                                     <div>
-                                                                        <label for="brand" class="block mb-2 text-sm font-medium text-gray-900   ">Last Name</label>
-                                                                        <input type="text" name="lastname" id="last_name" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5" placeholder="Default last name" required=""/>
+                                                                        <label for="brand" class="block mb-2 text-sm font-medium text-gray-900   ">Quantity</label>
+                                                                        <input type="text" name="lastname" id="last_name" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5" placeholder="Type quantity" required=""/>
                                                                     </div>
                                                                     <div>
-                                                                        <label for="price" class="block mb-2 text-sm font-medium text-gray-900">Employee ID</label>
-                                                                        <input type="text" name="employeeid" id="employee_id" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 " placeholder="Default employee number" required=""/>
+                                                                        <label for="price" class="block mb-2 text-sm font-medium text-gray-900">Variations</label>
+                                                                        <input type="text" name="employeeid" id="employee_id" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 " placeholder="Type product variants" required=""/>
                                                                     </div>
-                                                                    <div>
-                                                                        <label for="price" class="block mb-2 text-sm font-medium text-gray-900">Email address</label>
-                                                                        <input type="text" name="email" id="email" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 " placeholder="Default email address" required=""/>
+                                                                    <div className="sm:col-span-2">
+                                                                        <label for="description" className="block mb-2 text-md font-medium text-blue-950">Description</label>
+                                                                        <textarea id="description" rows="6" className="block p-2.5 w-full text-sm text-blue-950 bg-grey-50 rounded-lg border border-gray-300 focus:ring-primary-500 focus:border-primary-500" placeholder="Your description here"></textarea>
                                                                     </div>
-                                                                    <div>
-                                                                        <label for="price" class="block mb-2 text-sm font-medium text-gray-900">Mobile number</label>
-                                                                        <input type="text" name="mobilenumber" id="number" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 " placeholder="Default mobile number" required=""/>
-                                                                    </div>
-                                                                    
                                                                 </div>
                                                                 <div>
                                                                     <button type="submit" class="text-zinc-100 inline-flex items-center bg-gray-700 hover:bg-primary-800 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm  py-2.5 mt-2 justify-center w-full">
