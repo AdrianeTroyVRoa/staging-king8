@@ -123,6 +123,12 @@ export default function AdminProducts (){
                                                                         <svg aria-hidden="true" class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"></path></svg>
                                                                         <span class="sr-only">Close modal</span>
                                                                     </button>
+                                                                    <div className="sm:col-span-2 -mt-7">
+                                                                        <div class="relative w-48 h-48 mt-8 overflow-hidden bg-zinc-100 border border-gray-300 rounded-t-lg"></div>
+                                                                        <label class="text-blue-950 inline-flex border border-gray-300 justify-center items-center bg-gray-200 hover:bg-amber-400 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-b-lg text-sm w-48 py-2.5 text-center" for="user_avatar">Upload picture
+                                                                        </label>
+                                                                        <input class="hidden" id="user_avatar" type="file"/>
+                                                                    </div>
                                                                     <div>
                                                                         <label for="name" class="block mb-2 text-sm font-medium text-gray-900 ">Name</label>
                                                                         <input type="text" name="firstname" id="first_name" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5" placeholder="Type product name" required=""/>
@@ -171,6 +177,7 @@ export default function AdminProducts (){
                                                                         <span class="sr-only">Close modal</span>
                                                                     </button>
                                                                     <div className="sm:col-span-2 -mt-7">
+                                                                        <div class="relative w-48 h-48 mt-8 overflow-hidden bg-zinc-100 border border-gray-300 rounded-t-lg"></div>
                                                                         <label class="text-blue-950 inline-flex border border-gray-300 justify-center items-center bg-gray-200 hover:bg-amber-400 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-b-lg text-sm w-48 py-2.5 text-center" for="user_avatar">Upload picture
                                                                         </label>
                                                                         <input class="hidden" id="user_avatar" type="file"/>
@@ -202,16 +209,6 @@ export default function AdminProducts (){
                                                                         Confirm changes
                                                                     </button>
                                                                 </div>
-                                                                <div class="grid gap-4 mb-2 sm:grid-cols-2 mt-4">
-                                                                    <h3 class="text-md font-semibold text-blue-950 mt-4">Account control</h3>
-                                                                </div>
-                                                                <button type="submit" class="text-red-700 inline-flex items-center bg-zinc-100 border border-red-700 hover:bg-primary-800 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-3 py-2.5 mr-4 text-center">
-                                                                    Restrict access
-                                                                </button>
-
-                                                                <button type="submit" class="text-zinc-100 inline-flex items-center bg-red-700 hover:bg-primary-800 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-3 py-2.5 mr-4 text-center">
-                                                                    Delete account
-                                                                </button>
                                                             </form>
                                                         </div>
                                                     </div>
