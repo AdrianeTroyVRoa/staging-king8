@@ -5,7 +5,6 @@ import htmlInject from "vite-plugin-html-inject";
 // import devtools from 'solid-devtools/vite';
 
 export default defineConfig({
-//  root: 'src/pages/home',
   plugins: [
     /* 
     Uncomment the following line to enable solid-devtools.
@@ -43,6 +42,10 @@ export default defineConfig({
         home: resolve(__dirname, "src/pages/home/index.html"),
         login: resolve(__dirname, "src/pages/login/index.html"),
         register: resolve(__dirname, "src/pages/register/index.html"),
+      },
+      output: {
+        dir: resolve(__dirname, "dist/"),
+        entryFileNames: "[name].html",
       },
     },
   },
