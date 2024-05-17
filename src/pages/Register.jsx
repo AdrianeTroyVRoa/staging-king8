@@ -5,15 +5,15 @@ import { toast, Toaster } from "solid-toast";
 import * as yup from "yup";
 
 const schema = yup.object().shape({
-  firstName: yup.string().required("First Name is required"),
-  lastName: yup.string().required("Last Name is required"),
+  first_name: yup.string().required("First Name is required"),
+  last_name: yup.string().required("Last Name is required"),
   email: yup.string().email("Invalid email").required("Email is required"),
-  mobileNumber: yup.string().required("Mobile Number is required"),
+  mobile_number: yup.string().required("Mobile Number is required"),
   password: yup.string().required("Password is required"),
 });
 
 export default function Register() {
-  console.log('Hello')
+  console.log("Hello");
   const [firstName, setFirstName] = createSignal("");
   const [lastName, setLastName] = createSignal("");
   const [email, setEmail] = createSignal("");
@@ -44,10 +44,10 @@ export default function Register() {
     console.log("Reached submit function");
     e.preventDefault();
     const formData = {
-      firstName: firstName(),
-      lastName: lastName(),
+      first_name: firstName(),
+      last_name: lastName(),
       email: email(),
-      mobileNumber: mobileNumber(),
+      mobile_number: mobileNumber(),
       password: password(),
     };
 
@@ -65,6 +65,7 @@ export default function Register() {
 
         if (response.ok) {
           console.log("Form data submitted successfully");
+          console.log(formData);
           setFirstName("");
           setLastName("");
           setEmail("");
@@ -76,13 +77,20 @@ export default function Register() {
           console.error("Failed to submit form data");
           toast.error("Failed to register account");
         }
-      } catch (validationErrors) {
-        const errorMessages = validationErrors.inner.reduce((acc, error) => {
-          acc[error.path] = error.message;
-          return acc;
-        }, {});
-        setErrors(errorMessages);
-        toast.error("Failed to register due to validation errors");
+      } catch (err) {
+        if (err instanceof yup.ValidationError) {
+          const errorMessages = err.inner.reduce((acc, error) => {
+            acc[error.path] = error.message;
+            return acc;
+          }, {});
+          setErrors(errorMessages);
+          console.log(errors())
+          console.log(formData)
+          toast.error("Failed to register due to validation errors");
+        } else {
+          console.error("An unexpected error occurred:", err);
+          toast.error("An unexpected error occurred. Please try again later.");
+        }
       }
     }
   };
@@ -107,7 +115,7 @@ export default function Register() {
           <form className="space-y-6" onSubmit={handleSubmit}>
             <div>
               <label
-                for="firstName"
+                for="first_name"
                 className="block text-sm font-medium leading-6 text-gray-900"
               >
                 First Name
@@ -121,7 +129,7 @@ export default function Register() {
                   required
                   className="block w-full rounded-md border-0 py-1.5 px-3 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 sm:text-sm sm:leading-6"
                 />
-                {errors().firstName && (
+                {errors().first_name && (
                   <div style={{ color: "red" }}>{errors().firstName}</div>
                 )}
               </div>
@@ -143,7 +151,7 @@ export default function Register() {
                   required
                   className="block w-full rounded-md border-0 py-1.5 px-3 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 sm:text-sm sm:leading-6"
                 />
-                {errors().lastName && (
+                {errors().last_name && (
                   <div style={{ color: "red" }}>{errors().lastName}</div>
                 )}
               </div>
@@ -236,7 +244,7 @@ export default function Register() {
                   required
                   className="block w-full rounded-md border-0 py-1.5 px-3 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 sm:text-sm sm:leading-6"
                 />
-                {errors().confirmPassword && (
+                {errors().confirm_password && (
                   <div style={{ color: "red" }}>{errors().confirmPassword}</div>
                 )}
               </div>

@@ -15,9 +15,15 @@ const { parsePhoneNumber, isValidNumber } = require("libphonenumber-js");
 
 const router = Router();
 
+const cors = require('cors')
 const { body, validationResult } = require("express-validator");
 const bodyParser = require("body-parser");
 router.use(bodyParser.urlencoded({ extended: true }));
+router.use(cors({
+  origin: 'http://localhost:3000',
+  methods: ['POST'],
+  allowedHeaders: ['Content-Type']
+}));
 
 const signupValidation = [
   body("first_name").escape().notEmpty(),
@@ -86,7 +92,7 @@ router.post("/submit-register", signupValidation, (req, res) => {
     return res.send("error occured");
   }
 
-  //console.log(newCustomer);
+  console.log(newCustomer);
 
   return res.sendStatus(200);
 });
