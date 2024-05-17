@@ -88,7 +88,7 @@ router.post("/submit-register", signupValidation, (req, res) => {
 
   //console.log(newCustomer);
 
-  return res.send("signup successful");
+  return res.sendStatus(200);
 });
 
 async function matchPassKey(email) {

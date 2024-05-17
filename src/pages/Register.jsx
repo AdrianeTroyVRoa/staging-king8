@@ -1,7 +1,103 @@
-import "../../style/output.css";
-import king8 from "../../assets/king8-logo.png";
+import "../style/output.css";
+import king8 from "../assets/king8-logo.png";
+import { object, string, number, InferType } from "yup";
+import { createEffect, createSignal } from "solid-js";
+
+const schema = object({
+  firstName: string()
+    .min(2, "must be at least 2 characters long")
+    .max(50, "must be at most 50 characters only")
+    .matches(/^[a-zA-Z]+$/, "Only letters are allowed")
+    .required(),
+  lastName: string()
+    .min(2, "must be at least 2 characters long")
+    .max(50, "must be at most 50 characters only")
+    .matches(/^[a-zA-Z]+$/, "Only letters are allowed")
+    .required(),
+  email: string().email("must be a valid email").required(),
+  mobileNumber: string()
+    .min(10, "must start with 9")
+    .max(10, "must start with 9")
+    .required(),
+  password: string()
+    .min(8, "Password must be at least 8 characters long")
+    .max(20, "Password cannot be longer than 20 characters")
+    .matches(/[a-z]/, "Password must contain at least one lowercase letter")
+    .matches(/[A-Z]/, "Password must contain at least one uppercase letter")
+    .matches(/[0-9]/, "Password must contain at least one number")
+    .matches(
+      /[!@#$%^&*(),.?":{}|<>]/,
+      "Password must contain at least one special character",
+    )
+    .required("Password is required"),
+});
 
 export default function Register() {
+  const [firstName, setFirstName] = createSignal("");
+  const [lastName, setLastName] = createSignal("");
+  const [email, setEmail] = createSignal("");
+  const [mobileNumber, setMobileNumber] = createSignal("");
+  const [password, setPassword] = createSignal("");
+  const [confirmPassword, setConfirmPassword] = createSignal("");
+  const [confirmPasswordError, setConfirmPasswordError] = createSignal("");
+  const [errors, setErrors] = createSignal({});
+
+  createEffect(() => {
+    const passwordValue = password();
+    const confirmPasswordValue = confirmPassword();
+
+    if (passwordValue !== confirmPasswordValue) {
+      setConfirmPassword("Passwords do not match.");
+    } else {
+      setConfirmPassword("");
+    }
+  });
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    const formData = {
+      firstName: firstName(),
+      lastName: lastName(),
+      email: email(),
+      mobileNumber: mobileNumber(),
+      password: password(),
+    };
+
+    if (!confirmPasswordError()) {
+      try {
+        await schema.validate(formData, { strict: true });
+        setErrors({});
+
+        const response = await fetch("localhost:5000/submit-register", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(formData),
+        });
+
+        if (response.ok) {
+          console.log("Form data submitted successfully");
+          setFirstName("");
+          setLastName("");
+          setEmail("");
+          setMobileNumber("");
+          setPassword("");
+          setConfirmPassword("");
+          toast.success('Successfully registered account')
+        } else {
+          console.error("Failed to submit form data");
+          toast.error('Failed to register account')
+        }
+      } catch (validationErrors) {
+        const errorMessages = validationErrors.inner.reduce((acc, error) => {
+          acc[error.path] = error.message;
+          return acc;
+        }, {});
+        setErrors(errorMessages);
+        toast.error('Failed to register due to validation errors')
+      }
+    }
+  };
+
   return (
     <>
       <div className="flex min-h-full flex-col justify-center px-6 py-12 lg:px-8">
@@ -19,7 +115,7 @@ export default function Register() {
         </div>
 
         <div className="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
-          <form className="space-y-6" action="/submit-register" method="POST">
+          <form className="space-y-6" onSubmit={handleSubmit}>
             <div>
               <label
                 for="firstName"
@@ -30,11 +126,15 @@ export default function Register() {
               <div className="mt-2">
                 <input
                   id="first_name"
-                  name="first_name"
                   type="text"
+                  value={firstName()}
+                  onInput={(e) => setFirstName(e.target.value)}
                   required
                   className="block w-full rounded-md border-0 py-1.5 px-3 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 sm:text-sm sm:leading-6"
                 />
+                {errors().name && (
+                  <div style={{ color: "red" }}>{errors().name}</div>
+                )}
               </div>
             </div>
 
@@ -48,11 +148,15 @@ export default function Register() {
               <div className="mt-2">
                 <input
                   id="last_name"
-                  name="last_name"
+                  value={lastName()}
+                  onInput={(e) => setLastName(e.target.value)}
                   type="text"
                   required
                   className="block w-full rounded-md border-0 py-1.5 px-3 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 sm:text-sm sm:leading-6"
                 />
+                {errors().name && (
+                  <div style={{ color: "red" }}>{errors().name}</div>
+                )}
               </div>
             </div>
 
@@ -66,30 +170,38 @@ export default function Register() {
               <div className="mt-2">
                 <input
                   id="email"
-                  name="email"
+                  value={email()}
+                  onInput={(e) => setEmail(e.target.value)}
                   type="email"
                   autocomplete="email"
                   required
                   className="block w-full rounded-md border-0 py-1.5 px-3 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 sm:text-sm sm:leading-6"
                 />
+                {errors().name && (
+                  <div style={{ color: "red" }}>{errors().name}</div>
+                )}
               </div>
             </div>
 
             <div>
               <label
-                for="mobile_number"
+                for="mobileNumber"
                 className="block text-sm font-medium leading-6 text-gray-900"
               >
                 Mobile Number
               </label>
               <div className="mt-2">
                 <input
-                  id="mobile_number"
-                  name="mobile_number"
+                  id="mobileNumber"
+                  value={mobileNumber()}
+                  onInput={(e) => setMobileNumber(e.target.value)}
                   type="tel"
                   required
                   className="block w-full rounded-md border-0 py-1.5 px-3 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 sm:text-sm sm:leading-6"
                 />
+                {errors().name && (
+                  <div style={{ color: "red" }}>{errors().name}</div>
+                )}
               </div>
             </div>
 
@@ -105,11 +217,13 @@ export default function Register() {
               <div className="mt-2">
                 <input
                   id="password"
-                  name="password"
                   type="password"
                   required
                   className="block w-full rounded-md border-0 py-1.5 px-3 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 sm:text-sm sm:leading-6"
                 />
+                {errors().name && (
+                  <div style={{ color: "red" }}>{errors().name}</div>
+                )}
               </div>
             </div>
 
@@ -126,10 +240,14 @@ export default function Register() {
                 <input
                   id="confirm_password"
                   name="confirm_password"
+                  onInput={(e) => setPassword(e.target.value)}
                   type="password"
                   required
                   className="block w-full rounded-md border-0 py-1.5 px-3 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 sm:text-sm sm:leading-6"
                 />
+                {errors().name && (
+                  <div style={{ color: "red" }}>{errors().name}</div>
+                )}
               </div>
             </div>
 

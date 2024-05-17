@@ -1,5 +1,5 @@
-import "../../style/output.css";
-import king8 from "../../assets/king8-logo.png";
+import "../style/output.css";
+import king8 from "../assets/king8-logo.png";
 
 export default function Login() {
   return (
