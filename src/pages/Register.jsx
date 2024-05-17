@@ -1,38 +1,19 @@
 import "../style/output.css";
 import king8 from "../assets/king8-logo.png";
-import { object, string, number, InferType } from "yup";
-import { createEffect, createSignal } from "solid-js";
+import { createSignal, createEffect } from "solid-js";
+import { toast, Toaster } from "solid-toast";
+import * as yup from "yup";
 
-const schema = object({
-  firstName: string()
-    .min(2, "must be at least 2 characters long")
-    .max(50, "must be at most 50 characters only")
-    .matches(/^[a-zA-Z]+$/, "Only letters are allowed")
-    .required(),
-  lastName: string()
-    .min(2, "must be at least 2 characters long")
-    .max(50, "must be at most 50 characters only")
-    .matches(/^[a-zA-Z]+$/, "Only letters are allowed")
-    .required(),
-  email: string().email("must be a valid email").required(),
-  mobileNumber: string()
-    .min(10, "must start with 9")
-    .max(10, "must start with 9")
-    .required(),
-  password: string()
-    .min(8, "Password must be at least 8 characters long")
-    .max(20, "Password cannot be longer than 20 characters")
-    .matches(/[a-z]/, "Password must contain at least one lowercase letter")
-    .matches(/[A-Z]/, "Password must contain at least one uppercase letter")
-    .matches(/[0-9]/, "Password must contain at least one number")
-    .matches(
-      /[!@#$%^&*(),.?":{}|<>]/,
-      "Password must contain at least one special character",
-    )
-    .required("Password is required"),
+const schema = yup.object().shape({
+  firstName: yup.string().required("First Name is required"),
+  lastName: yup.string().required("Last Name is required"),
+  email: yup.string().email("Invalid email").required("Email is required"),
+  mobileNumber: yup.string().required("Mobile Number is required"),
+  password: yup.string().required("Password is required"),
 });
 
 export default function Register() {
+  console.log('Hello')
   const [firstName, setFirstName] = createSignal("");
   const [lastName, setLastName] = createSignal("");
   const [email, setEmail] = createSignal("");
@@ -41,19 +22,26 @@ export default function Register() {
   const [confirmPassword, setConfirmPassword] = createSignal("");
   const [confirmPasswordError, setConfirmPasswordError] = createSignal("");
   const [errors, setErrors] = createSignal({});
+  const [displayErr, setDisplayErr] = createSignal(true);
 
   createEffect(() => {
     const passwordValue = password();
     const confirmPasswordValue = confirmPassword();
-
     if (passwordValue !== confirmPasswordValue) {
-      setConfirmPassword("Passwords do not match.");
+      setConfirmPasswordError("Passwords do not match.");
+      if (displayErr()) {
+        toast.error(confirmPasswordError());
+      }
+      setDisplayErr(false);
     } else {
-      setConfirmPassword("");
+      toast.success("Password Match");
+      setDisplayErr(true);
+      setConfirmPasswordError("");
     }
   });
 
   const handleSubmit = async (e) => {
+    console.log("Reached submit function");
     e.preventDefault();
     const formData = {
       firstName: firstName(),
@@ -64,11 +52,12 @@ export default function Register() {
     };
 
     if (!confirmPasswordError()) {
+      console.log("Should reach if password match");
       try {
         await schema.validate(formData, { strict: true });
         setErrors({});
 
-        const response = await fetch("localhost:5000/submit-register", {
+        const response = await fetch("http://localhost:5000/submit-register", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify(formData),
@@ -82,10 +71,10 @@ export default function Register() {
           setMobileNumber("");
           setPassword("");
           setConfirmPassword("");
-          toast.success('Successfully registered account')
+          toast.success("Successfully registered account");
         } else {
           console.error("Failed to submit form data");
-          toast.error('Failed to register account')
+          toast.error("Failed to register account");
         }
       } catch (validationErrors) {
         const errorMessages = validationErrors.inner.reduce((acc, error) => {
@@ -93,7 +82,7 @@ export default function Register() {
           return acc;
         }, {});
         setErrors(errorMessages);
-        toast.error('Failed to register due to validation errors')
+        toast.error("Failed to register due to validation errors");
       }
     }
   };
@@ -132,8 +121,8 @@ export default function Register() {
                   required
                   className="block w-full rounded-md border-0 py-1.5 px-3 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 sm:text-sm sm:leading-6"
                 />
-                {errors().name && (
-                  <div style={{ color: "red" }}>{errors().name}</div>
+                {errors().firstName && (
+                  <div style={{ color: "red" }}>{errors().firstName}</div>
                 )}
               </div>
             </div>
@@ -154,8 +143,8 @@ export default function Register() {
                   required
                   className="block w-full rounded-md border-0 py-1.5 px-3 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 sm:text-sm sm:leading-6"
                 />
-                {errors().name && (
-                  <div style={{ color: "red" }}>{errors().name}</div>
+                {errors().lastName && (
+                  <div style={{ color: "red" }}>{errors().lastName}</div>
                 )}
               </div>
             </div>
@@ -177,8 +166,8 @@ export default function Register() {
                   required
                   className="block w-full rounded-md border-0 py-1.5 px-3 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 sm:text-sm sm:leading-6"
                 />
-                {errors().name && (
-                  <div style={{ color: "red" }}>{errors().name}</div>
+                {errors().email && (
+                  <div style={{ color: "red" }}>{errors().email}</div>
                 )}
               </div>
             </div>
@@ -199,8 +188,8 @@ export default function Register() {
                   required
                   className="block w-full rounded-md border-0 py-1.5 px-3 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 sm:text-sm sm:leading-6"
                 />
-                {errors().name && (
-                  <div style={{ color: "red" }}>{errors().name}</div>
+                {errors().mobileNumber && (
+                  <div style={{ color: "red" }}>{errors().mobileNumber}</div>
                 )}
               </div>
             </div>
@@ -217,12 +206,14 @@ export default function Register() {
               <div className="mt-2">
                 <input
                   id="password"
+                  value={password()}
+                  onInput={(e) => setPassword(e.target.value)}
                   type="password"
                   required
                   className="block w-full rounded-md border-0 py-1.5 px-3 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 sm:text-sm sm:leading-6"
                 />
-                {errors().name && (
-                  <div style={{ color: "red" }}>{errors().name}</div>
+                {errors().password && (
+                  <div style={{ color: "red" }}>{errors().password}</div>
                 )}
               </div>
             </div>
@@ -239,14 +230,14 @@ export default function Register() {
               <div className="mt-2">
                 <input
                   id="confirm_password"
-                  name="confirm_password"
-                  onInput={(e) => setPassword(e.target.value)}
+                  value={confirmPassword()}
+                  onInput={(e) => setConfirmPassword(e.target.value)}
                   type="password"
                   required
                   className="block w-full rounded-md border-0 py-1.5 px-3 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 sm:text-sm sm:leading-6"
                 />
-                {errors().name && (
-                  <div style={{ color: "red" }}>{errors().name}</div>
+                {errors().confirmPassword && (
+                  <div style={{ color: "red" }}>{errors().confirmPassword}</div>
                 )}
               </div>
             </div>
@@ -296,6 +287,7 @@ export default function Register() {
           </p>
         </div>
       </div>
+      <Toaster />
     </>
   );
 }

@@ -1,7 +1,7 @@
-import { Route } from "@solidjs/router";
 import Home from "./pages/Home";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
+import { Route } from "@solidjs/router";
 
 function App() {
   return (
