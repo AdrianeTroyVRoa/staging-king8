@@ -4,26 +4,24 @@ const {
   getCustomerById,
 } = require("../prisma/queries/customerQueries");
 
-const {
-  createUser,
-  getUserById,
-  getUserByEmail,
-} = require("../prisma/queries/userQueries");
+const { createUser, getUserById } = require("../prisma/queries/userQueries");
 
 const { Router } = require("express");
 const { parsePhoneNumber, isValidNumber } = require("libphonenumber-js");
 
-const router = Router();
+const regisRouter = Router();
 
-const cors = require('cors')
+const cors = require("cors");
 const { body, validationResult } = require("express-validator");
 const bodyParser = require("body-parser");
-router.use(bodyParser.urlencoded({ extended: true }));
-router.use(cors({
-  origin: 'http://localhost:3000',
-  methods: ['POST'],
-  allowedHeaders: ['Content-Type']
-}));
+regisRouter.use(bodyParser.urlencoded({ extended: true }));
+regisRouter.use(
+  cors({
+    origin: "http://localhost:3000",
+    methods: ["POST"],
+    allowedHeaders: ["Content-Type"],
+  }),
+);
 
 const signupValidation = [
   body("first_name").escape().notEmpty(),
@@ -56,7 +54,7 @@ async function addCustomer(customer) {
 }
 
 //registration proper
-router.post("/submit-register", signupValidation, (req, res) => {
+regisRouter.post("/submit-register", signupValidation, (req, res) => {
   const errorSignup = validationResult(req);
 
   if (!errorSignup.isEmpty()) {
@@ -97,30 +95,4 @@ router.post("/submit-register", signupValidation, (req, res) => {
   return res.sendStatus(200);
 });
 
-async function matchPassKey(email) {
-  try {
-    const user = await getUserByEmail(email);
-    if (user) {
-      return user.password;
-    }
-    return null;
-  } catch (err) {
-    throw err;
-  }
-}
-
-//login proper
-router.post("/login-user", async (req, res) => {
-  const email = req.body.email;
-  const pass = req.body.password;
-  const passKeyToMatch = await matchPassKey(email);
-
-  //console.log(passKeyToMatch);
-  if (passKeyToMatch == pass) {
-    return res.send("Logged In");
-  }
-
-  return res.status(400).send("Not matching any accounts.");
-});
-
-module.exports = router;
+module.exports = regisRouter;

@@ -85,7 +85,6 @@ export default function Register() {
           }, {});
           setErrors(errorMessages);
           console.log(errors())
-          console.log(formData)
           toast.error("Failed to register due to validation errors");
         } else {
           console.error("An unexpected error occurred:", err);

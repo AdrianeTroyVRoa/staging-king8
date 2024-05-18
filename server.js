@@ -1,11 +1,13 @@
 const express = require("express");
 const path = require("path");
 const app = express();
-const authRouter = require("./routes/auth.js");
+const regisRouter = require("./routes/register.js");
+const loginRouter = require("./routes/login.js");
 
 app.use(express.json());
 app.use(express.static(path.join(__dirname, "dist")));
-app.use(authRouter);
+app.use(regisRouter);
+app.use(loginRouter);
 
 //api workings
 const mockUsers = [
