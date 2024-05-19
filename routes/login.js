@@ -3,6 +3,8 @@ const { getUserByEmail } = require("../prisma/queries/userQueries");
 const { Router } = require("express");
 const loginRouter = Router()
 
+const bcrypt = require('bcrypt')
+
 async function matchPassKey(email) {
   try {
     const user = await getUserByEmail(email);
@@ -22,11 +24,12 @@ loginRouter.post("/login-user", async (req, res) => {
   const passKeyToMatch = await matchPassKey(email);
 
   //console.log(passKeyToMatch);
-  if (passKeyToMatch == pass) {
+  const isPassKeyMatched = bcrypt.compareSync(pass, passKeyToMatch)
+  if (isPassKeyMatched) {
     return res.sendStatus(200);
   }
 
-  return res.status(400).send("Not matching any accounts.");
+  return res.sendStatus(400);
 });
 
 module.exports = loginRouter;

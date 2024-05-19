@@ -3,13 +3,36 @@ import king8 from "../assets/king8-logo.png";
 import { createSignal, createEffect } from "solid-js";
 import { toast, Toaster } from "solid-toast";
 import * as yup from "yup";
+//import zxcvbn from "zxcvbn"; //for password strength checker
 
 const schema = yup.object().shape({
-  first_name: yup.string().required("First Name is required"),
-  last_name: yup.string().required("Last Name is required"),
-  email: yup.string().email("Invalid email").required("Email is required"),
-  mobile_number: yup.string().required("Mobile Number is required"),
-  password: yup.string().required("Password is required"),
+  first_name: yup
+    .string()
+    .min(2, "First Name needs to be at least 2 characters")
+    .max(50, "First Name only allows up to 50 characters")
+    .required("First Name is required"),
+  last_name: yup
+    .string()
+    .min(2, "Last Name needs to be at least 2 characters")
+    .max(50, "Last Name only allows up to 50 characters")
+    .required("Last Name is required"),
+  email: yup
+    .string()
+    .email("Invalid email")
+    .matches(
+      /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/,
+      "Invalid email format",
+    )
+    .required("Email is required"),
+  mobile_number: yup
+    .string()
+    .min(10, "Philippine Mobile Number is required to be 10 characters")
+    .max(10, "Philippine Mobile Number is required to be 10 characters"),
+  password: yup
+    .string()
+    .min(8, "Password needs to be at least 8 characters")
+    .max(40, "Password should be utmost 40 characters only")
+    .required("Password is required"),
 });
 
 export default function Register() {
@@ -22,23 +45,6 @@ export default function Register() {
   const [confirmPassword, setConfirmPassword] = createSignal("");
   const [confirmPasswordError, setConfirmPasswordError] = createSignal("");
   const [errors, setErrors] = createSignal({});
-  const [displayErr, setDisplayErr] = createSignal(true);
-
-  createEffect(() => {
-    const passwordValue = password();
-    const confirmPasswordValue = confirmPassword();
-    if (passwordValue !== confirmPasswordValue) {
-      setConfirmPasswordError("Passwords do not match.");
-      if (displayErr()) {
-        toast.error(confirmPasswordError());
-      }
-      setDisplayErr(false);
-    } else {
-      toast.success("Password Match");
-      setDisplayErr(true);
-      setConfirmPasswordError("");
-    }
-  });
 
   const handleSubmit = async (e) => {
     console.log("Reached submit function");
@@ -51,41 +57,57 @@ export default function Register() {
       password: password(),
     };
 
+    const passwordValue = password();
+    const confirmPasswordValue = confirmPassword();
+    if (passwordValue !== confirmPasswordValue) {
+      setConfirmPasswordError("Passwords do not match");
+      toast.error(confirmPasswordError());
+    } else {
+      setConfirmPasswordError("");
+    }
+
     if (!confirmPasswordError()) {
       console.log("Should reach if password match");
       try {
-        await schema.validate(formData, { strict: true });
+        await schema.validate(formData, { abortEarly: false });
         setErrors({});
 
-        const response = await fetch("http://localhost:5000/submit-register", {
+        const response = fetch("http://localhost:5000/submit-register", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify(formData),
+        }).then((response) => {
+          if (response.ok) {
+            console.log("Form data submitted successfully");
+            console.log(formData);
+            setFirstName("");
+            setLastName("");
+            setEmail("");
+            setMobileNumber("");
+            setPassword("");
+            setConfirmPassword("");
+          } else {
+            console.error("Failed to submit form data");
+            throw new Error("Failed to register account");
+          }
         });
 
-        if (response.ok) {
-          console.log("Form data submitted successfully");
-          console.log(formData);
-          setFirstName("");
-          setLastName("");
-          setEmail("");
-          setMobileNumber("");
-          setPassword("");
-          setConfirmPassword("");
-          toast.success("Successfully registered account");
-        } else {
-          console.error("Failed to submit form data");
-          toast.error("Failed to register account");
-        }
+        toast.promise(response, {
+          loading: "Registering your account",
+          success: "You're in! Verify account via your email now",
+          error: "Error occurred while registering your account",
+        });
       } catch (err) {
         if (err instanceof yup.ValidationError) {
-          const errorMessages = err.inner.reduce((acc, error) => {
-            acc[error.path] = error.message;
-            return acc;
-          }, {});
-          setErrors(errorMessages);
-          console.log(errors())
-          toast.error("Failed to register due to validation errors");
+          const errorMessages = {};
+          err.inner.forEach((error) => {
+            errorMessages[error.path] = error.message;
+          });
+
+          console.log(mobileNumber());
+          for (const field in errorMessages) {
+            toast.error(`Input Error: ${errorMessages[field]}`);
+          }
         } else {
           console.error("An unexpected error occurred:", err);
           toast.error("An unexpected error occurred. Please try again later.");
@@ -128,9 +150,6 @@ export default function Register() {
                   required
                   className="block w-full rounded-md border-0 py-1.5 px-3 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 sm:text-sm sm:leading-6"
                 />
-                {errors().first_name && (
-                  <div style={{ color: "red" }}>{errors().firstName}</div>
-                )}
               </div>
             </div>
 
@@ -150,9 +169,6 @@ export default function Register() {
                   required
                   className="block w-full rounded-md border-0 py-1.5 px-3 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 sm:text-sm sm:leading-6"
                 />
-                {errors().last_name && (
-                  <div style={{ color: "red" }}>{errors().lastName}</div>
-                )}
               </div>
             </div>
 
@@ -173,9 +189,6 @@ export default function Register() {
                   required
                   className="block w-full rounded-md border-0 py-1.5 px-3 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 sm:text-sm sm:leading-6"
                 />
-                {errors().email && (
-                  <div style={{ color: "red" }}>{errors().email}</div>
-                )}
               </div>
             </div>
 
@@ -186,7 +199,8 @@ export default function Register() {
               >
                 Mobile Number
               </label>
-              <div className="mt-2">
+              <div className="mt-2 flex items-center">
+                <span>+63</span>
                 <input
                   id="mobileNumber"
                   value={mobileNumber()}
@@ -195,9 +209,6 @@ export default function Register() {
                   required
                   className="block w-full rounded-md border-0 py-1.5 px-3 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 sm:text-sm sm:leading-6"
                 />
-                {errors().mobileNumber && (
-                  <div style={{ color: "red" }}>{errors().mobileNumber}</div>
-                )}
               </div>
             </div>
 
@@ -219,9 +230,6 @@ export default function Register() {
                   required
                   className="block w-full rounded-md border-0 py-1.5 px-3 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 sm:text-sm sm:leading-6"
                 />
-                {errors().password && (
-                  <div style={{ color: "red" }}>{errors().password}</div>
-                )}
               </div>
             </div>
 
@@ -243,9 +251,6 @@ export default function Register() {
                   required
                   className="block w-full rounded-md border-0 py-1.5 px-3 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 sm:text-sm sm:leading-6"
                 />
-                {errors().confirm_password && (
-                  <div style={{ color: "red" }}>{errors().confirmPassword}</div>
-                )}
               </div>
             </div>
 
