@@ -18,6 +18,7 @@
   },
   "dependencies": {
     "express": "^4.19.2",
-    "solid-js": "^1.8.11"
+    "solid-js": "^1.8.11",
+    "solid-toast": "^0.5.0"
   }
 }
