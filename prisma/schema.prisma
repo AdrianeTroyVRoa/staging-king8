@@ -1,0 +1,75 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id         Int         @id @default(autoincrement())
+  email      String      @unique
+  mobile_num String      @unique @db.VarChar(10)
+  first_name String
+  last_name  String
+  password   String?
+  createdAt  DateTime    @default(now())
+  updatedAt  DateTime    @updatedAt @default(now()) 
+  Customer   Customer[]
+  Employee   Employee[]
+}
+
+model Customer {
+  id         Int         @id @default(autoincrement())
+  isVerified Boolean     @default(false)
+  Interaction   Interaction[]
+  user_id    User        @relation(fields: [userId], references: [id])
+  userId     Int
+}
+
+model Employee {
+  id          Int    @id @default(autoincrement())
+  employee_id String @unique
+  user_id     User   @relation(fields: [userId], references: [id])
+  userId      Int
+}
+
+model Product {
+  id          Int         @id @default(autoincrement())
+  name        String      @unique
+  num_left    Int
+  description String
+  image_src   String
+  Interaction   Interaction[]
+}
+
+model Interaction {
+  id         Int       @id @default(autoincrement())
+  product_id Product   @relation(fields: [productId], references: [id])
+  createdAt  DateTime  @default(now())
+  updatedAt  DateTime  @updatedAt
+  productId  Int
+  Customer   Customer @relation(fields: [customerId], references: [id])
+  customerId Int
+  Inquiries   Inquiries[]
+}
+
+model Inquiries {
+  id             Int       @id @default(autoincrement())
+  additional_msg String?
+  status         Status
+  interaction_id   Interaction @relation(fields: [interactionId], references: [id])
+  interactionId Int
+}
+
+enum Status {
+  PENDING
+  RESOLVED
+}
