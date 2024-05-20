@@ -44,7 +44,6 @@ export default function Register() {
   const [password, setPassword] = createSignal("");
   const [confirmPassword, setConfirmPassword] = createSignal("");
   const [confirmPasswordError, setConfirmPasswordError] = createSignal("");
-  const [errors, setErrors] = createSignal({});
 
   const handleSubmit = async (e) => {
     console.log("Reached submit function");
@@ -70,7 +69,6 @@ export default function Register() {
       console.log("Should reach if password match");
       try {
         await schema.validate(formData, { abortEarly: false });
-        setErrors({});
 
         const response = fetch("http://localhost:5000/submit-register", {
           method: "POST",
