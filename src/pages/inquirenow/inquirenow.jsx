@@ -1,8 +1,22 @@
+import { onMount } from 'solid-js';
 import 'flowbite/dist/flowbite.min.css';
 import 'flowbite/dist/flowbite.min.js';
 import emailjs from "emailjs-com";
+import {toast , Toaster } from "solid-toast";
 
 function InquireNow() {
+
+    onMount(() => {
+        // Dynamically create and append the script element
+        const script = document.createElement('script');
+        script.src = 'https://cdn.emailjs.com/dist/email.min.js';
+        script.onload = () => {
+          // Initialize EmailJS with your user ID after the script is loaded
+          emailjs.init('YMQh1o1VaUixvbnJi'); // Replace with your actual user ID
+        };
+        document.body.appendChild(script);
+      });
+
     const sendEmail = (e) => {
         e.preventDefault();
         let parms = {
@@ -25,10 +39,10 @@ function InquireNow() {
         emailjs.send('service_king8', 'template_y7jupsr', templateParams, 'YMQh1o1VaUixvbnJi')
             .then((result) => {
                 console.log("Email Sent:", result.text); // Debugging log
-                alert('Message sent successfully!');
+                toast.success('Message sent successfully!');
             }, (error) => {
                 console.error("Error:", error.text); // Debugging log
-                alert('Failed to send the message, please try again.');
+                toast.error('Failed to send the message, please try again.');
             });
     };
 
@@ -40,7 +54,7 @@ function InquireNow() {
             sendEmail(e);
         } else {
             // CAPTCHA challenge not completed, show error message or handle accordingly
-            alert('Please complete the CAPTCHA challenge.');
+            toast.error('Please complete the CAPTCHA challenge.');
         }
     
       
@@ -49,7 +63,7 @@ function InquireNow() {
 
             
     };
-    return (
+    return (    
         <div className="flex justify-center items-center h-full bg-gray-100">
             <div className="max-w-screen-xl px-4 py-48 lg:py-16">
                 <div className="mt-6 sm:mt-8 md:gap-6 flex flex-col items-center xl:gap-8 justify-center">
@@ -67,7 +81,7 @@ function InquireNow() {
                                 </div>
 
                                 {/* form */}
-                                <form action="http://localhost:3001/" method="POST" onSubmit={handleFormSubmit} className="space-y-8 ">
+                                <form action="http://localhost:3000/" method="POST" onSubmit={handleFormSubmit} className="space-y-8 ">
                                     
                                 <div className="border-t border-b border-blue-800 py-4">
                                     {/* name */}
@@ -101,6 +115,7 @@ function InquireNow() {
                     </div>
                 </div>
             </div>
+            <Toaster />
         </div>
     );
 }
