@@ -12,7 +12,6 @@ async function getCustomerById(customerId) {
     where: {
       id: customerId,
     },
-    include: { user: true },
   });
 }
 

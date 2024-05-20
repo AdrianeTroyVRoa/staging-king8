@@ -3,13 +3,17 @@ const {
   createCustomer,
   getCustomerById,
 } = require("../prisma/queries/customerQueries");
-
 const { createUser, getUserById } = require("../prisma/queries/userQueries");
 
+//for routing
 const { Router } = require("express");
+const regisRouter = Router();
+
 const { parsePhoneNumber, isValidNumber } = require("libphonenumber-js");
 
-const regisRouter = Router();
+//for hashing
+const bcrypt = require("bcrypt");
+const saltRounds = 10;
 
 const cors = require("cors");
 const { body, validationResult } = require("express-validator");
@@ -33,28 +37,26 @@ const signupValidation = [
 
 //register
 async function addCustomer(customer) {
-  try {
-    const newUser = await createUser({
-      email: customer.email,
-      mobile_num: customer.mobile_number,
-      first_name: customer.first_name,
-      last_name: customer.last_name,
-      password: customer.password,
-    });
-    const newCustomer = await createCustomer({
-      userId: newUser.id,
-    });
-    const user = await getUserById(newUser.id);
-    const custom = await getCustomerById(newCustomer.id);
-    console.log(user);
-    console.log(custom);
-  } catch (error) {
-    return new Error("Failed to process data: " + error.message);
-  }
+  const hashedUserPass = bcrypt.hashSync(customer.password, saltRounds);
+
+  const newUser = await createUser({
+    email: customer.email,
+    mobile_num: customer.mobile_number,
+    first_name: customer.first_name,
+    last_name: customer.last_name,
+    password: hashedUserPass,
+  });
+  const newCustomer = await createCustomer({
+    userId: newUser.id,
+  });
+  const user = await getUserById(newUser.id);
+  const custom = await getCustomerById(newCustomer.id);
+  console.log(user);
+  console.log(custom);
 }
 
 //registration proper
-regisRouter.post("/submit-register", signupValidation, (req, res) => {
+regisRouter.post("/submit-register", signupValidation, async (req, res) => {
   const errorSignup = validationResult(req);
 
   if (!errorSignup.isEmpty()) {
@@ -62,11 +64,11 @@ regisRouter.post("/submit-register", signupValidation, (req, res) => {
     return;
   }
 
-  const mobileNumber = req.body.mobile_number;
+  const mobileNumber = "+63" + req.body.mobile_number;
   const isValidPHNum = isValidNumber(mobileNumber);
 
   if (!isValidPHNum) {
-    return res.send("Not a valid PH phone number");
+    return res.sendStatus(400);
   }
 
   const parsedNumber = parsePhoneNumber(mobileNumber, "PH");
@@ -84,10 +86,10 @@ regisRouter.post("/submit-register", signupValidation, (req, res) => {
   };
 
   try {
-    addCustomer(newCustomer);
+    await addCustomer(newCustomer);
   } catch (error) {
-    console.log(error);
-    return res.send("error occured");
+    console.log(error)
+    return res.sendStatus(500);
   }
 
   console.log(newCustomer);

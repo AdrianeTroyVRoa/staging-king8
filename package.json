@@ -10,6 +10,7 @@
   },
   "license": "MIT",
   "devDependencies": {
+    "bcrypt": "^5.1.1",
     "cors": "^2.8.5",
     "prisma": "^5.13.0",
     "solid-devtools": "^0.29.2",
@@ -26,6 +27,7 @@
     "express-validator": "^7.0.1",
     "libphonenumber-js": "^1.11.1",
     "nodemon": "^3.1.0",
-    "solid-js": "^1.8.11"
+    "solid-js": "^1.8.11",
+    "zxcvbn": "^4.4.2"
   }
 }
