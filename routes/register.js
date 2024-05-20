@@ -92,7 +92,7 @@ regisRouter.post("/submit-register", signupValidation, async (req, res) => {
     return res.sendStatus(500);
   }
 
-  console.log(newCustomer);
+  //console.log(newCustomer);
 
   return res.sendStatus(200);
 });
