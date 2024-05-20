@@ -1,7 +1,43 @@
-import "../../style/output.css";
-import king8 from "../../assets/king8-logo.png";
+import "../style/output.css";
+import king8 from "../assets/king8-logo.png";
+import { createSignal } from "solid-js";
+import { useNavigate } from "@solidjs/router";
 
 export default function Login() {
+  const [email, setEmail] = createSignal("");
+  const [password, setPassword] = createSignal("");
+  const navigate = useNavigate();
+
+  const handleSubmit = async (e) => {
+    console.log("Reached submit function");
+    e.preventDefault();
+    const formData = {
+      email: email(),
+      password: password(),
+    };
+
+    try {
+      const response = await fetch("http://localhost:5000/login-user", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(formData),
+      });
+
+      if (response.ok) {
+        console.log("Form data submitted successfully");
+        setEmail("");
+        setPassword("");
+        navigate("/", { replace: true });
+      } else {
+        console.error("Failed to Login");
+        toast.error("Failed to Login");
+      }
+    } catch (err) {
+      console.error("An unexpected error occurred:", err);
+      toast.error("An unexpected error occurred. Please try again later.");
+    }
+  };
+
   return (
     <>
       <div className="flex min-h-full flex-col justify-center px-6 py-12 lg:px-8">
@@ -19,7 +55,7 @@ export default function Login() {
         </div>
 
         <div className="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
-          <form className="space-y-6" action="#" method="POST">
+          <form className="space-y-6" onSubmit={handleSubmit}>
             <div>
               <label
                 for="email"
@@ -30,7 +66,7 @@ export default function Login() {
               <div className="mt-2">
                 <input
                   id="email"
-                  name="email"
+                  onInput={(e) => setEmail(e.target.value)}
                   type="email"
                   autocomplete="email"
                   required
@@ -59,7 +95,7 @@ export default function Login() {
               <div className="mt-2">
                 <input
                   id="password"
-                  name="password"
+                  onInput={(e) => setPassword(e.target.value)}
                   type="password"
                   autocomplete="current-password"
                   required

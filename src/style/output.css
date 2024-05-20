@@ -728,6 +728,8 @@ video {
   margin-bottom: 5rem;
 }
 
+<<<<<<< HEAD
+=======
 .mb-10 {
   margin-bottom: 2.5rem;
 }
@@ -736,6 +738,7 @@ video {
   margin-bottom: 4rem;
 }
 
+>>>>>>> development
 .mb-2 {
   margin-bottom: 0.5rem;
 }
@@ -792,10 +795,13 @@ video {
   margin-top: 1rem;
 }
 
+<<<<<<< HEAD
+=======
 .mt-8 {
   margin-top: 2rem;
 }
 
+>>>>>>> development
 .block {
   display: block;
 }
@@ -1303,6 +1309,14 @@ video {
   font-weight: 600;
 }
 
+.uppercase {
+  text-transform: uppercase;
+}
+
+.lowercase {
+  text-transform: lowercase;
+}
+
 .italic {
   font-style: italic;
 }
@@ -1626,6 +1640,13 @@ video {
     display: flex;
   }
 
+<<<<<<< HEAD
+  .lg\:w-1\/2 {
+    width: 50%;
+  }
+
+=======
+>>>>>>> development
   .lg\:w-1\/4 {
     width: 25%;
   }
