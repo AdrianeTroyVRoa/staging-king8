@@ -29,7 +29,7 @@ model User {
 model Customer {
   id         Int         @id @default(autoincrement())
   isVerified Boolean     @default(false)
-  Interaction   Interaction[]
+  Wishlist   Wishlist[]
   user_id    User        @relation(fields: [userId], references: [id])
   userId     Int
 }
@@ -47,10 +47,10 @@ model Product {
   num_left    Int
   description String
   image_src   String
-  Interaction   Interaction[]
+  Wishlist   Wishlist[]
 }
 
-model Interaction {
+model Wishlist {
   id         Int       @id @default(autoincrement())
   product_id Product   @relation(fields: [productId], references: [id])
   createdAt  DateTime  @default(now())
@@ -58,15 +58,16 @@ model Interaction {
   productId  Int
   Customer   Customer @relation(fields: [customerId], references: [id])
   customerId Int
-  Inquiries   Inquiries[]
 }
 
 model Inquiries {
   id             Int       @id @default(autoincrement())
+  name String?
+  subject        String    @db.VarChar(60)
+  mobile_num String      @unique @db.VarChar(10)
   additional_msg String?
+  createdAt  DateTime    @default(now())
   status         Status
-  interaction_id   Interaction @relation(fields: [interactionId], references: [id])
-  interactionId Int
 }
 
 enum Status {
