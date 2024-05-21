@@ -6,6 +6,7 @@ import NotFound from "./pages/NotFound";
 import Products from "./pages/Products";
 import Register from "./pages/Register";
 import { Route } from "@solidjs/router";
+import IndividualProducts from "./pages/IndividualProducts";
 
 function App() {
   const [isAuthenticated, setIsAuthenticated] = createSignal(
