@@ -4,8 +4,8 @@ import 'flowbite/dist/flowbite.min.css';
 import 'flowbite/dist/flowbite.min.js';
 import emailjs from "emailjs-com";
 import { toast, Toaster } from "solid-toast";
-import Header from "../../components/Header";
-import Footer from "../../components/Footer";
+import Header from "../components/Header";
+import Footer from "../components/Footer";
 
 function InquireNow() {
     const [name, setName] = createSignal('');
