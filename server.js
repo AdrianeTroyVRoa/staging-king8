@@ -1,4 +1,3 @@
-app.use(express.static(path.join(__dirname, 'dist')));
 // Serve HTML files
 const express = require("express");
 const path = require("path");
@@ -92,6 +91,12 @@ app.get("/api/users/:id", (req, res) => {
 //});
 
 // Start server
+//
+//app.get("/about us", (req, res) => {
+//  res.sendFile(path.join(__dirname, "dist/src/pages/about/index.html"));
+//});
+
+const PORT = 5000;
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);
 });
