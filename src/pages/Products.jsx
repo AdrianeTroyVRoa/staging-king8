@@ -1,13 +1,13 @@
-import basin from "../../assets/Basin_King8.png";
-import bottle from "../../assets/Bottle_King8.png";
-import chair from "../../assets/Chairs_King8.png";
-import clip from "../../assets/Clip_King8.png";
-import gallon from "../../assets/Gallon_King8.png";
-import pipes from "../../assets/Pipes_King8.png";
-import header from "../../assets/product-7.png";
-import Footer from "../../components/Footer";
-import Header from "../../components/Header";
-import "../../style/output.css";
+import basin from "../assets/Basin_King8.png";
+import bottle from "../assets/Bottle_King8.png";
+import chair from "../assets/Chairs_King8.png";
+import clip from "../assets/Clip_King8.png";
+import gallon from "../assets/Gallon_King8.png";
+import pipes from "../assets/Pipes_King8.png";
+import header from "../assets/product-7.png";
+import Footer from "../components/Footer";
+import Header from "../components/Header";
+import "../style/output.css";
 
 function Products() {
     return(

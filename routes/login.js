@@ -1,5 +1,4 @@
 const { getUserByEmail } = require("../prisma/queries/userQueries");
-
 const { Router } = require("express");
 const loginRouter = Router()
 
@@ -23,7 +22,7 @@ loginRouter.post("/login-user", async (req, res) => {
   const pass = req.body.password;
   const passKeyToMatch = await matchPassKey(email);
 
-  //console.log(passKeyToMatch);
+  console.log("Reached login backend")
   const isPassKeyMatched = bcrypt.compareSync(pass, passKeyToMatch)
   if (isPassKeyMatched) {
     return res.sendStatus(200);
