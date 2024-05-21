@@ -60,10 +60,10 @@ app.get("/api/users/:id", (req, res) => {
 //app.get("/login", (req, res) => {
 //  res.sendFile(path.join(__dirname, "dist/src/pages/login/index.html"));
 //});
-
-app.get('/about us', (req, res) => {
-    res.sendFile(path.join(__dirname, 'dist/src/pages/about/index.html'));
-});
+//
+//app.get("/about us", (req, res) => {
+//  res.sendFile(path.join(__dirname, "dist/src/pages/about/index.html"));
+//});
 
 const PORT = 5000;
 app.listen(PORT, () => {

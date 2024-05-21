@@ -2,13 +2,14 @@ import "../style/output.css";
 import king8 from "../assets/king8-logo.png";
 import { createSignal } from "solid-js";
 import { useNavigate } from "@solidjs/router";
+import { Toaster, toast } from "solid-toast";
 
-export default function Login() {
+export default function Login(props) {
   const [email, setEmail] = createSignal("");
   const [password, setPassword] = createSignal("");
   const navigate = useNavigate();
 
-  const handleSubmit = async (e) => {
+  const handleLogin = async (e) => {
     console.log("Reached submit function");
     e.preventDefault();
     const formData = {
@@ -27,7 +28,12 @@ export default function Login() {
         console.log("Form data submitted successfully");
         setEmail("");
         setPassword("");
-        navigate("/", { replace: true });
+
+        //setting localStorage session
+        localStorage.setItem('isAuthenticated', 'true');
+        props.setIsAuthenticated(true);
+        console.log('Reached this part')
+        navigate("/admin", { replace: true });
       } else {
         console.error("Failed to Login");
         toast.error("Failed to Login");
@@ -55,7 +61,7 @@ export default function Login() {
         </div>
 
         <div className="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
-          <form className="space-y-6" onSubmit={handleSubmit}>
+          <form className="space-y-6" onSubmit={handleLogin}>
             <div>
               <label
                 for="email"
@@ -125,6 +131,7 @@ export default function Login() {
           </p>
         </div>
       </div>
+    <Toaster />
     </>
   );
 }
