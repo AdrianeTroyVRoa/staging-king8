@@ -5,6 +5,7 @@ import Visit from "../components/Visit";
 import Video from "../components/Video";
 import Contact from "../components/Contact";
 import "../style/output.css";
+import Footer from "../components/Footer";
 
 function Home() {
   return (
@@ -15,6 +16,7 @@ function Home() {
       <Visit />
       <Video />
       <Contact />
+      <Footer />
     </div>
   );
 }
