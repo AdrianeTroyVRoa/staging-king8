@@ -19,4 +19,21 @@ async function getAllInquiries() {
   return prisma.inquiries.findMany();
 }
 
-module.exports = { createInquiry, getInquiryById, getAllInquiries };
+async function updateInquiry(inquiryId, updatedData) {
+  return prisma.inquiries.update({
+    where: {
+      id: inquiryId,
+    },
+    data: updatedData,
+  });
+}
+
+async function deleteInquiry(inquiryId) {
+  return prisma.inquiries.delete({
+    where: {
+      id: inquiryId,
+    },
+  });
+}
+
+module.exports = { createInquiry, getInquiryById, getAllInquiries, updateInquiry, deleteInquiry };

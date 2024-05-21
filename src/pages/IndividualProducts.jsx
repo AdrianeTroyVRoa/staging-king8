@@ -44,11 +44,11 @@ export default function IndividualProducts() {
         </div>
         
         {/* Navigation Buttons */}
-        <div className="flex justify-center items-center mt-10">
-          <button className="font-bold border-solid border-2 border-blue-950 text-blue-950 py-2 px-4 rounded-lg hover:bg-amber-400 mx-2">
+        <div className="flex items-center mt-10">
+          <button className="font-bold border-solid border-2 border-blue-950 text-blue-950 py-2 px-4 rounded-lg hover:bg-amber-400 mx-3"> 
             &lt;
           </button>
-          <button className="font-bold border-solid border-2 border-blue-950 text-blue-950 py-2 px-4 rounded-lg hover:bg-amber-400 mx-2">
+          <button className="font-bold border-solid border-2 border-blue-950 text-blue-950 py-2 px-4 rounded-lg hover:bg-amber-400 mx-3"> 
             &gt;
           </button>
         </div>
