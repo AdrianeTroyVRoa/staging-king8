@@ -1,7 +1,119 @@
-import "../../style/output.css";
-import king8 from "../../assets/king8-logo.png";
+import "../style/output.css";
+import king8 from "../assets/king8-logo.png";
+import { createSignal, createEffect } from "solid-js";
+import { toast, Toaster } from "solid-toast";
+import * as yup from "yup";
+//import zxcvbn from "zxcvbn"; //for password strength checker
+
+const schema = yup.object().shape({
+  first_name: yup
+    .string()
+    .min(2, "First Name needs to be at least 2 characters")
+    .max(50, "First Name only allows up to 50 characters")
+    .required("First Name is required"),
+  last_name: yup
+    .string()
+    .min(2, "Last Name needs to be at least 2 characters")
+    .max(50, "Last Name only allows up to 50 characters")
+    .required("Last Name is required"),
+  email: yup
+    .string()
+    .email("Invalid email")
+    .matches(
+      /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/,
+      "Invalid email format",
+    )
+    .required("Email is required"),
+  mobile_number: yup
+    .string()
+    .min(10, "Philippine Mobile Number is required to be 10 characters")
+    .max(10, "Philippine Mobile Number is required to be 10 characters"),
+  password: yup
+    .string()
+    .min(8, "Password needs to be at least 8 characters")
+    .max(40, "Password should be utmost 40 characters only")
+    .required("Password is required"),
+});
 
 export default function Register() {
+  console.log("Hello");
+  const [firstName, setFirstName] = createSignal("");
+  const [lastName, setLastName] = createSignal("");
+  const [email, setEmail] = createSignal("");
+  const [mobileNumber, setMobileNumber] = createSignal("");
+  const [password, setPassword] = createSignal("");
+  const [confirmPassword, setConfirmPassword] = createSignal("");
+  const [confirmPasswordError, setConfirmPasswordError] = createSignal("");
+
+  const handleSubmit = async (e) => {
+    console.log("Reached submit function");
+    e.preventDefault();
+    const formData = {
+      first_name: firstName(),
+      last_name: lastName(),
+      email: email(),
+      mobile_number: mobileNumber(),
+      password: password(),
+    };
+
+    const passwordValue = password();
+    const confirmPasswordValue = confirmPassword();
+    if (passwordValue !== confirmPasswordValue) {
+      setConfirmPasswordError("Passwords do not match");
+      toast.error(confirmPasswordError());
+    } else {
+      setConfirmPasswordError("");
+    }
+
+    if (!confirmPasswordError()) {
+      console.log("Should reach if password match");
+      try {
+        await schema.validate(formData, { abortEarly: false });
+
+        const response = fetch("http://localhost:5000/submit-register", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(formData),
+        }).then((response) => {
+          if (response.ok) {
+            console.log("Form data submitted successfully");
+            console.log(formData);
+            setFirstName("");
+            setLastName("");
+            setEmail("");
+            setMobileNumber("");
+            setPassword("");
+            setConfirmPassword("");
+          } else {
+            console.error("Failed to submit form data");
+            throw new Error("Failed to register account");
+          }
+        });
+
+        toast.promise(response, {
+          loading: "Registering your account",
+          success: "You're in! Verify account via your email now",
+          error: "Error occurred while registering your account",
+        });
+      } catch (err) {
+        if (err instanceof yup.ValidationError) {
+          const errorMessages = {};
+          err.inner.forEach((error) => {
+            errorMessages[error.path] = error.message;
+          });
+
+          console.log(mobileNumber());
+          for (const field in errorMessages) {
+            toast.error(`Input Error: ${errorMessages[field]}`);
+          }
+        } else {
+          console.error("An unexpected error occurred:", err);
+          toast.error("An unexpected error occurred. Please try again later.");
+        }
+      }
+    }
+  };
+
   return (
     <>
       <div className="flex min-h-full flex-col justify-center px-6 py-12 lg:px-8">
@@ -19,10 +131,10 @@ export default function Register() {
         </div>
 
         <div className="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
-          <form className="space-y-6" action="#" method="POST">
+          <form className="space-y-6" onSubmit={handleSubmit}>
             <div>
               <label
-                for="firstName"
+                for="first_name"
                 className="block text-sm font-medium leading-6 text-gray-900"
               >
                 First Name
@@ -30,8 +142,9 @@ export default function Register() {
               <div className="mt-2">
                 <input
                   id="first_name"
-                  name="first_name"
                   type="text"
+                  value={firstName()}
+                  onInput={(e) => setFirstName(e.target.value)}
                   required
                   className="block w-full rounded-md border-0 py-1.5 px-3 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 sm:text-sm sm:leading-6"
                 />
@@ -48,7 +161,8 @@ export default function Register() {
               <div className="mt-2">
                 <input
                   id="last_name"
-                  name="last_name"
+                  value={lastName()}
+                  onInput={(e) => setLastName(e.target.value)}
                   type="text"
                   required
                   className="block w-full rounded-md border-0 py-1.5 px-3 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 sm:text-sm sm:leading-6"
@@ -66,7 +180,8 @@ export default function Register() {
               <div className="mt-2">
                 <input
                   id="email"
-                  name="email"
+                  value={email()}
+                  onInput={(e) => setEmail(e.target.value)}
                   type="email"
                   autocomplete="email"
                   required
@@ -77,15 +192,17 @@ export default function Register() {
 
             <div>
               <label
-                for="mobile_number"
+                for="mobileNumber"
                 className="block text-sm font-medium leading-6 text-gray-900"
               >
                 Mobile Number
               </label>
-              <div className="mt-2">
+              <div className="mt-2 flex items-center">
+                <span>+63</span>
                 <input
-                  id="mobile_number"
-                  name="mobile_number"
+                  id="mobileNumber"
+                  value={mobileNumber()}
+                  onInput={(e) => setMobileNumber(e.target.value)}
                   type="tel"
                   required
                   className="block w-full rounded-md border-0 py-1.5 px-3 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 sm:text-sm sm:leading-6"
@@ -105,7 +222,8 @@ export default function Register() {
               <div className="mt-2">
                 <input
                   id="password"
-                  name="password"
+                  value={password()}
+                  onInput={(e) => setPassword(e.target.value)}
                   type="password"
                   required
                   className="block w-full rounded-md border-0 py-1.5 px-3 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 sm:text-sm sm:leading-6"
@@ -125,7 +243,8 @@ export default function Register() {
               <div className="mt-2">
                 <input
                   id="confirm_password"
-                  name="confirm_password"
+                  value={confirmPassword()}
+                  onInput={(e) => setConfirmPassword(e.target.value)}
                   type="password"
                   required
                   className="block w-full rounded-md border-0 py-1.5 px-3 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 sm:text-sm sm:leading-6"
@@ -178,6 +297,7 @@ export default function Register() {
           </p>
         </div>
       </div>
+      <Toaster />
     </>
   );
 }
