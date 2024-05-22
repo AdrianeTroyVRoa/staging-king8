@@ -48,6 +48,7 @@ function InquireNow() {
     const inquiryData = {
       name: parms.name,
       subject: parms.subject,
+      email: parms.email,
       mobile_num: parms.phoneNum,
       msg: parms.message,
       status: "PENDING",
