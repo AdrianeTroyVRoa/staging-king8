@@ -63,6 +63,7 @@ model Wishlist {
 model Inquiries {
   id             Int       @id @default(autoincrement())
   name String?
+  email      String      @unique
   subject        String    @db.VarChar(60)
   mobile_num String      @unique @db.VarChar(10)
   additional_msg String?
@@ -73,4 +74,5 @@ model Inquiries {
 enum Status {
   PENDING
   RESOLVED
+  REJECTED
 }

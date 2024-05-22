@@ -14,7 +14,7 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
 // Your reCAPTCHA secret key
-const secretKey = '6LcD2OEpAAAAACLlQB6HjvG1DlZBASDe-98SKPTr'; 
+const secretKey = '6LdfcOQpAAAAAPRwNBgVNirwXMaK34MBpH4sZR4M'; 
 
 // CAPTCHA verification route
 app.post('/verify-captcha', (req, res) => {

@@ -14,6 +14,7 @@ async function addInquiry(inquiry) {
     const newInquiry = await createInquiry({
       name: inquiry.name,
       subject: inquiry.subject,
+      email: inquiry.email,
       mobile_num: inquiry.mobile_num,
       additional_msg: inquiry.msg,
       status: inquiry.status,
@@ -27,7 +28,7 @@ async function addInquiry(inquiry) {
 
 //inquiry input
 inquiryRouter.post("/submit-inquiry", async (req, res) => {
-  const mobileNumber = "+63" + req.body.mobile_number;
+  const mobileNumber = req.body.mobile_number;
   const isValidPHNum = isValidNumber(mobileNumber);
 
   if (!isValidPHNum) {
@@ -40,6 +41,7 @@ inquiryRouter.post("/submit-inquiry", async (req, res) => {
   const newInquiry = {
     name: req.body.name,
     subject: req.body.subject,
+    email: req.body.email,
     mobile_num: transformMobileNumber,
     additional_msg: req.body.msg,
   };
@@ -54,4 +56,4 @@ inquiryRouter.post("/submit-inquiry", async (req, res) => {
   return res.sendStatus(200);
 });
 
-module.exports = { addInquiry, inquiryRouter };
+module.exports = inquiryRouter;
