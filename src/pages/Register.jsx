@@ -1,6 +1,6 @@
 import "../style/output.css";
 import king8 from "../assets/king8-logo.png";
-import { createSignal, createEffect } from "solid-js";
+import { createSignal } from "solid-js";
 import { toast, Toaster } from "solid-toast";
 import * as yup from "yup";
 //import zxcvbn from "zxcvbn"; //for password strength checker
@@ -255,7 +255,7 @@ export default function Register() {
             <div>
               <button
                 type="submit"
-                className="flex w-full justify-center rounded-md bg-blue-950 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-blue-700 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+                className="default:bg-blue-950 hover:bg-blue-700 flex w-full justify-center rounded-md px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
               >
                 Register
               </button>
