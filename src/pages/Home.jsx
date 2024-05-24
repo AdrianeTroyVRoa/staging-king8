@@ -6,11 +6,12 @@ import Video from "../components/Video";
 import Contact from "../components/Contact";
 import "../style/output.css";
 import Footer from "../components/Footer";
+import LoggedInHeader from "../components/LoggedInHeader";
 
 function Home() {
   return (
     <div className="scroll-smooth">
-      <Header />
+      <LoggedInHeader />
       <TopSec />
       <MenuSec />
       <Visit />
