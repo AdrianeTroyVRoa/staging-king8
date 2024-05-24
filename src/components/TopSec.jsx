@@ -6,7 +6,7 @@ function TopSec() {
 
       <div className="grid max-w-screen-xl px-4 py-8 mx-auto lg:gap-8 xl:gap-0 lg:py-16">
         <div className="mr-auto place-self-center lg:col-span-7">
-          <h1 className="max-w-2xl text-white mb-4 text-4xl font-extrabold leading-none md:text-6xl xl:text-7xl text-center">
+          <h1 className="max-w-2xl text-white mb-4 text-7xl font-extrabold leading-none md:text-6xl xl:text-7xl text-center">
             MINDANAO KING8 PLASTICS
           </h1>
           <p className="max-w-2xl mb-6 font-light text-white lg:mb-8 md:text-xl lg:text-2xl text-center">
