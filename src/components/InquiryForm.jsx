@@ -15,15 +15,27 @@ function InquireNow() {
   const [phoneNum, setPhoneNum] = createSignal("");
 
   onMount(() => {
-    // Dynamically create and append the script element
-    const script = document.createElement("script");
-    script.src = "https://cdn.emailjs.com/dist/email.min.js";
-    script.onload = () => {
+    // Dynamically create and append the script element for reCAPTCHA
+    const recaptchaScript = document.createElement("script");
+    recaptchaScript.src = "https://www.google.com/recaptcha/api.js";
+    recaptchaScript.onload = () => {
+      // Initialize reCAPTCHA after the script is loaded
+      window.grecaptcha.ready(() => {
+        // reCAPTCHA initialized
+      });
+    };
+    document.body.appendChild(recaptchaScript);
+
+    // Dynamically create and append the script element for EmailJS
+    const emailjsScript = document.createElement("script");
+    emailjsScript.src = "https://cdn.emailjs.com/dist/email.min.js";
+    emailjsScript.onload = () => {
       // Initialize EmailJS with your user ID after the script is loaded
       emailjs.init("YMQh1o1VaUixvbnJi"); // Replace with your actual user ID
     };
-    document.body.appendChild(script);
+    document.body.appendChild(emailjsScript);
   });
+
 
   const sendEmail = (e) => {
     e.preventDefault();
@@ -237,7 +249,7 @@ function InquireNow() {
               <div className="flex justify-center">
                 <div
                   className="g-recaptcha"
-                  data-sitekey="6LcD2OEpAAAAAG2-9oN0YpEp8oiKLTz9dl8B4JtY"
+                  data-sitekey="6LdfcOQpAAAAABjG8hk5XKdOvmZ7Epuyj_iIeEwB"
                 ></div>
               </div>
             </div>

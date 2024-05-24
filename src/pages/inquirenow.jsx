@@ -238,7 +238,7 @@ function InquireNow() {
               <div className="flex justify-center">
                 <div
                   className="g-recaptcha"
-                  data-sitekey="6LcD2OEpAAAAAG2-9oN0YpEp8oiKLTz9dl8B4JtY"
+                  data-sitekey="6LdfcOQpAAAAABjG8hk5XKdOvmZ7Epuyj_iIeEwB"
                 ></div>
               </div>
             </div>

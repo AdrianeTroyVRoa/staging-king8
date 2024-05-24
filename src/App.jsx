@@ -26,7 +26,7 @@ function App() {
       />
       <Route path="/inquiry" component={InquireNow} />
       <Route path="/sign-up" component={Register} />
-      <Route path="/products" component={Products} />
+      <Route path="/products" component={InquireNow} />
       <Route
         path="/admin"
         component={
