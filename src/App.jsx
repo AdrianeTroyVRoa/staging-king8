@@ -6,6 +6,7 @@ import NotFound from "./pages/NotFound";
 import Products from "./pages/Products";
 import Register from "./pages/Register";
 import { Route } from "@solidjs/router";
+import AdminHeader from "./components/AdminHeader";
 
 function App() {
   const [isAuthenticated, setIsAuthenticated] = createSignal(
@@ -20,6 +21,12 @@ function App() {
         path="/login"
         component={(props) => (
           <Login {...props} setIsAuthenticated={setIsAuthenticated} />
+        )}
+      />
+      <Route
+        path="/logout"
+        component={(props) => (
+          <AdminHeader {...props} setIsAuthenticated={setIsAuthenticated} />
         )}
       />
       <Route path="/sign-up" component={Register} />

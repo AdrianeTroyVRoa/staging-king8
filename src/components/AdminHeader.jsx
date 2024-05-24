@@ -1,10 +1,12 @@
-import { redirect } from "@solidjs/router";
 import logo from "../assets/king8-logo.png";
 
-export default function AdminHeader() {
+export default function AdminHeader(props) {
   const handleLogout = () => {
+    e.preventDefault();
     localStorage.removeItem("isAuthenticated");
-    redirect("/");
+    props.setIsAuthenticated(false);
+    console.log("Reached Logout");
+    window.location.href = '/'
   };
 
   return (

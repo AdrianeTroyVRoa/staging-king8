@@ -23,8 +23,6 @@ loginRouter.post("/login-user", async (req, res) => {
   const passKeyToMatch = await matchPassKey(email);
 
   console.log("Reached login backend")
-  console.log(pass)
-  console.log(passKeyToMatch)
   const isPassKeyMatched = bcrypt.compareSync(pass, passKeyToMatch)
   if (isPassKeyMatched) {
     return res.sendStatus(200);
