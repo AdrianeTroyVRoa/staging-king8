@@ -1,5 +1,6 @@
 import { createSignal } from "solid-js";
 import AdminProducts from "./pages/AdminProducts";
+import AdminInquiry from "./pages/AdminInquiry";
 import Home from "./pages/Home";
 import Login from "./pages/Login";
 import NotFound from "./pages/NotFound";
