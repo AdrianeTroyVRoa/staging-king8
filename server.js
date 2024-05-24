@@ -6,15 +6,15 @@ const regisRouter = require("./routes/register.js");
 const loginRouter = require("./routes/login.js");
 const inquiryRouter = require("./routes/inquiry.js");
 
-const product = require('./routes/products.js');
-const productRouter = product.productRouter;
+//const product = require('./routes/products.js');
+//const productRouter = product.productRouter;
 
 app.use(express.json());
 app.use(express.static(path.join(__dirname, "dist")));
 app.use(regisRouter);
 app.use(loginRouter);
 app.use(inquiryRouter);
-app.use(productRouter);
+//app.use(productRouter);
 
 // Your reCAPTCHA secret key
 const secretKey = "6LcD2OEpAAAAACLlQB6HjvG1DlZBASDe-98SKPTr";
