@@ -1,6 +1,6 @@
 function Visit() {
   return (
-    <section className="bg-cover bg-center flex items-center justify-center my-10" id="visit">
+    <section className="bg-cover bg-center flex items-center justify-center my-20" id="visit">
       <div className="flex lg:flex-row sm:flex-col md:flex-col container my-10 mx-10">
         <div className="grid grid-cols-1  md:grid-cols-2 lg:grid-cols-2 sm:grid-cols-1">
           <div className="container mx-auto">
