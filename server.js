@@ -13,7 +13,7 @@ app.use(express.json());
 app.use(express.static(path.join(__dirname, "dist")));
 app.use(regisRouter);
 app.use(loginRouter);
-//app.use(inquiryRouter);
+app.use(inquiryRouter);
 //app.use(productRouter);
 
 // Your reCAPTCHA secret key

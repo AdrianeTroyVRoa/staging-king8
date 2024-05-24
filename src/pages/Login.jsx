@@ -7,7 +7,12 @@ import { Toaster, toast } from "solid-toast";
 export default function Login(props) {
   const [email, setEmail] = createSignal("");
   const [password, setPassword] = createSignal("");
+  const [showPassword, setShowPassword] = createSignal(false);
   const navigate = useNavigate();
+
+  const togglePasswordVisibility = () => {
+    setShowPassword(!showPassword());
+  };
 
   const handleLogin = async (e) => {
     console.log("Reached submit function");
@@ -30,9 +35,9 @@ export default function Login(props) {
         setPassword("");
 
         //setting localStorage session
-        localStorage.setItem('isAuthenticated', 'true');
+        localStorage.setItem("isAuthenticated", "true");
         props.setIsAuthenticated(true);
-        console.log('Reached this part')
+        console.log("Reached this part");
         navigate("/admin", { replace: true });
       } else {
         console.error("Failed to Login");
@@ -102,18 +107,27 @@ export default function Login(props) {
                 <input
                   id="password"
                   onInput={(e) => setPassword(e.target.value)}
-                  type="password"
+                  type={showPassword() ? "text" : "password"}
                   autocomplete="current-password"
                   required
                   className="block w-full rounded-md border-0 py-1.5 px-3 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 sm:text-sm sm:leading-6"
                 />
+                <div class="flex gap-2 mt-2">
+                  <input
+                    type="checkbox"
+                    checked={showPassword()}
+                    onchange={togglePasswordVisibility}
+                    class="text-blue-950"
+                  />
+                  Show Password
+                </div>
               </div>
             </div>
 
             <div>
               <button
                 type="submit"
-                className="flex w-full justify-center rounded-md bg-blue-950 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-blue-700 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+                className="flex w-full justify-center rounded-md default:bg-blue-950 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-blue-700 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
               >
                 Sign in
               </button>
@@ -131,7 +145,7 @@ export default function Login(props) {
           </p>
         </div>
       </div>
-    <Toaster />
+      <Toaster />
     </>
   );
 }
