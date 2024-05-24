@@ -1,59 +1,58 @@
 //db prisma
-const {
-  createProduct,
-  getProductById,
-  getAllProducts,
-  updateProduct,
-  deleteProduct,
-} = require("../prisma/queries/productQueries");
-
+const { createProduct } = require("../prisma/queries/productQueries");
 const { Router } = require("express");
+const { body, validationResult } = require("express-validator");
 const productRouter = Router();
 
-const path = require("path");
+const cors = require("cors");
+const bodyParser = require("body-parser");
 
-const projectPath = path.resolve(__dirname, "..");
-//const imgFolderPath = path.join(projectPath, "public/img/products"); //path to the image folder
+//middle ware
+productRouter.use(bodyParser.urlencoded({ extended: true}));
+productRouter.use(
+  cors({
+    origin: "http://localhost:3000",
+    methods: ["POST"],
+    allowedHeaders: ["Content-Type"],
+  })
+);
 
-//adding product
+const productValidation = [
+  body("product_name").escape().notEmpty(),
+  body("num_left").escape().notEmpty(),
+  body("description").escape().notEmpty()
+];
+
 async function addProduct(product) {
-  try {
-    const newProduct = await createProduct({
-      name: product.name,
-      num_left: product.num_left,
-      description: product.description,
-      image_src: product.img_src,
+  const newProduct = await createProduct({
+    product_name: product.product_name,
+    mobile_num: product.num_left,
+    first_name: product.description,
+  });
+  console.log("New product")
+  return newProduct;
+}
+
+productRouter.post("/add-product", productValidation, async (req, res) => {
+  const errors = validationResult(req);
+  if(!errors.isEmpty()){
+    return res.status(400).json({ errors: errors.array() });
+  }
+
+  const { product_name, num_left, description } = req.body;
+
+  try{
+    await createProduct({
+      product_name,
+      num_left,
+      description,
     });
-    const theProduct = await getProductById(newProduct.id);
-    console.log(theProduct);
-    return "Added to DB";
-  } catch (error) {
-    return new Error("Failed to process data: " + error.message);
-  }
-}
-
-async function showProducts() {
-  console.log("Current Products in the Database---------------------");
-  console.log(await getAllProducts());
-}
-
-//showProducts();
-productRouter.post("/add-product", async (req, res) => {
-  const newProduct = {
-    name: req.body.name,
-    num_left: req.body.num_left,
-    description: req.body.description,
-    img_src: req.body.img_src,
-  };
-
-  try {
-    await addProduct(newProduct);
-  } catch (error) {
+    console.log("Added product")
+    return res.status(201).json({ message: "Product added successfully"});
+  } catch (error){
     console.log(error);
-    return res.sendStatus(500);
+    return res.status(500).json({ error: "Failed to add product" });
   }
-
-  return res.sendStatus(200);
 });
 
-module.exports = { addProduct, showProducts, productRouter };
+module.exports = productRouter;

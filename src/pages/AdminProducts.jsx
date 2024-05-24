@@ -5,7 +5,7 @@ import pipes from "../assets/Pipes_King8.png";
 import AdminHeader from "../components/AdminHeader";
 
 const schema = yup.object().shape({
-  name: yup
+  product_name: yup
   .string()
   .min(2, "Name must be more than 2 characters")
   .max(40, "Name must be less than 40 characters")
@@ -24,6 +24,7 @@ export default function AdminProducts() {
   const [productName, setProductName] = createSignal("");
   const [numLeft, setNumLeft] = createSignal("");
   const [description, setDescription] = createSignal("");
+
   const [isEditModalOpen, setIsEditModalOpen] = createSignal(false);
   const [isAddModalOpen, setIsAddModalOpen] = createSignal(false);
   const [isConfirmModalOpen, setIsConfirmModalOpen] = createSignal(false);
@@ -31,16 +32,16 @@ export default function AdminProducts() {
   const [isConfirmDeleteOpen, setIsConfirmDeleteOpen] = createSignal(false);
 
   const handleSend = async (e) => {
+    console.log("Finshed add products form")
     e.preventDefault();
     const addFormData = {
-      name: productName(),
+      product_name: productName(),
       num_left: numLeft(),
       description: description(),
     };
 
     try{
-      await schema.validate(addFormData);
-
+      await schema.validate(addFormData, { abortEarly: false });
       const response = fetch("http://localhost:5000/add-product", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -53,16 +54,13 @@ export default function AdminProducts() {
           setProductName("");
           setNumLeft("");
           setDescription("");
-          isConfirmModalOpen(true);
-          toast.success("Product successfully added")
+          
         } else{
           console.error("Failed to add product");
-          throw new Error("Failed to add product");
         }
 
     } catch(err) {
-      console.error("Error:", error.message);
-      toast.error("Error adding product");
+      console.error("Error:", err.message);
     }
   };
   
@@ -132,8 +130,6 @@ export default function AdminProducts() {
       console.err(err);
     }
   };
-
-  
 
   const openEditWindow = () => setIsEditModalOpen(true);
   const closeEditWindow = () => setIsEditModalOpen(false);
@@ -272,7 +268,7 @@ export default function AdminProducts() {
                             <input
                               type="text"
                               name="name"
-                              id="name"
+                              id="product_name"
                               value={productName()}
                               onInput={(e)=>setProductName(e.target.value)}
                               class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5"
@@ -387,7 +383,7 @@ export default function AdminProducts() {
                               type="text"
                               name="name"
                               id="name"
-                              value={updateForm().name}
+                              value={name}
                               class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5"
                               placeholder="Type product name"
                               required=""
@@ -403,7 +399,7 @@ export default function AdminProducts() {
                                 type="text"
                                 name="num_left"
                                 id="num_left"
-                                value={updateForm().num_left}
+                                value={numLeft}
                                 class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5"
                                 placeholder="Type quantity"
                                 required=""
@@ -421,7 +417,7 @@ export default function AdminProducts() {
                             <textarea
                               id="description"
                               rows="6"
-                              value={updateForm().description}
+                              value={description}
                               className="block p-2.5 w-full text-sm text-blue-950 bg-grey-50 rounded-lg border border-gray-300 focus:ring-primary-500 focus:border-primary-500"
                               placeholder="Your description here"
                             ></textarea>
