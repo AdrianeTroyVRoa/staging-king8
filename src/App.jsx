@@ -22,7 +22,7 @@ function App() {
         component={(props) => (
           <Login {...props} setIsAuthenticated={setIsAuthenticated} />
         )}
-      />
+      /> //Problem hereee
       <Route
         path="/logout"
         component={(props) => (

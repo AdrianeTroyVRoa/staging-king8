@@ -1,12 +1,12 @@
 import logo from "../assets/king8-logo.png";
 
 export default function AdminHeader(props) {
-  const handleLogout = () => {
+  const handleLogout = (e) => {
     e.preventDefault();
     localStorage.removeItem("isAuthenticated");
     props.setIsAuthenticated(false);
     console.log("Reached Logout");
-    window.location.href = '/'
+    window.location.href = "/";
   };
 
   return (
