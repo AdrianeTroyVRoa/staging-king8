@@ -31,6 +31,11 @@ export default function AdminProducts() {
   const [isConfirmEditOpen, setIsConfirmEditOpen] = createSignal(false);
   const [isConfirmDeleteOpen, setIsConfirmDeleteOpen] = createSignal(false);
 
+  const openAdd = () => {
+    console.log("Confirm adding product");
+    setIsConfirmModalOpen(true);
+  }
+
   const handleSend = async (e) => {
     console.log("Finshed add products form")
     e.preventDefault();
@@ -64,38 +69,41 @@ export default function AdminProducts() {
     }
   };
   
-    
-  const handleUpdate = async (e) => {
+  const openUpdate = () =>{
+    console.log("Confirming product changes")
+    setIsConfirmEditOpen(true);
+  };
+
+  const handleUpdate = async (productId) => {
+    console.log("Finshed update products form")
     e.preventDefault();
     const updateFormData = {
-      name: productName(),
+      product_name: productName(),
       num_left: numLeft(),
       description: description(),
     };
 
     try{
-      await schema.validate(updateFormData);
-      const response = fetch("https://localhost:5000/update-product", {
+      await schema.validate(updateFormData, { abortEarly: false });
+      const response = await fetch("http://localhost:5000/update-product/${productId}", {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(updateFormData),
-      }).then((response)=>{
+      });
+
         if(response.ok){
+          isConfirmEditOpen(true);
           console.log("Product updated successfully");
           
         } else{
           console.error("Error updating product");
           throw new Error("Error updating product");
         }
-      });
+      
 
-      toast.promise(response, {
-        loading: "Updating product",
-        success: "Product successfully updated",
-        error: "Error updating product",
-      });
+    
     } catch(err){
-      if(err instanceof yup.ValidationError){
+      if(err){
         const errorMessages = {};
         err.inner.forEach((error) => {
           errorMessages[error.path] = error.message;
@@ -104,30 +112,27 @@ export default function AdminProducts() {
     }
   };
 
-  const handleDelete = async (e) => {
+  const openDelete = () =>{
+    console.log("Confirming product deletion")
+    setIsConfirmDeleteOpen(true);
+  }
+
+  const handleDelete = async (productId) => {
     try{
-      const response = fetch("https://localhost:5000/delete-product", {
+      const response = fetch("http://localhost:5000/delete-product/${productId}", {
         method: "DELETE",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({name: productName()}),
-      }).then((response)=>{
+      });
+
         if(response.ok){
           console.log("Product deleted successfully");
-          setProductName("");
-          setNumLeft("");
-          setDescription("");
+          
         } else {
           console.error("Delete failed");
-          throw new Error("Delete failed");
         }
-      });
-      toast.promise(response, {
-        loading: "Deleting product",
-        success: "Product successfully deleted",
-        error: "Error deleting product",
-      });
+      
     } catch (err){
-      console.err(err);
+      console.error("Error:", err.message);
     }
   };
 
@@ -218,7 +223,7 @@ export default function AdminProducts() {
 
                   <div class="absolute bg-gray-100 rounded-lg p-8 shadow-lg">
                     <div class="modal-content flex justify-center items-center bg-zinc-100">
-                      <form action="#" class="w-full" onSubmit={handleSend}>
+                      <form action="#" class="w-full">
                         <div class="grid gap-4 mb-4 sm:grid-cols-2">
                           <h3 class="text-lg font-semibold text-gray-900">
                             Add product
@@ -315,7 +320,8 @@ export default function AdminProducts() {
                         </div>
                         <div>
                           <button
-                            type="submit"
+                            onClick={openAdd}
+                            type="button"
                             class="text-zinc-100 inline-flex items-center bg-gray-700 hover:bg-primary-800 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm  py-2.5 mt-2 justify-center w-full"
                           >
                             Add product
@@ -332,7 +338,7 @@ export default function AdminProducts() {
 
                   <div class="absolute bg-gray-100 rounded-lg p-8 shadow-lg max-w-lg w-full">
                     <div class="modal-content flex justify-center items-center bg-zinc-100">
-                      <form action="#" class="w-full" onSubmit={handleUpdate}>
+                      <form action="#" class="w-full" onSubmit={openUpdate}>
                         <div class="grid gap-4 mb-4 md:grid-cols-2 sm:grid-cols-2">
                           <h3 class="text-lg font-semibold text-gray-900">
                             Edit product
@@ -383,7 +389,7 @@ export default function AdminProducts() {
                               type="text"
                               name="name"
                               id="name"
-                              value={name}
+                              value={productName()}
                               class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5"
                               placeholder="Type product name"
                               required=""
@@ -399,7 +405,7 @@ export default function AdminProducts() {
                                 type="text"
                                 name="num_left"
                                 id="num_left"
-                                value={numLeft}
+                                value={numLeft()}
                                 class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5"
                                 placeholder="Type quantity"
                                 required=""
@@ -417,7 +423,7 @@ export default function AdminProducts() {
                             <textarea
                               id="description"
                               rows="6"
-                              value={description}
+                              value={description()}
                               className="block p-2.5 w-full text-sm text-blue-950 bg-grey-50 rounded-lg border border-gray-300 focus:ring-primary-500 focus:border-primary-500"
                               placeholder="Your description here"
                             ></textarea>
@@ -425,13 +431,15 @@ export default function AdminProducts() {
                         </div>
                         <div>
                           <button
+                            
                             type="submit"
                             class="text-zinc-100 inline-flex  items-center bg-gray-700 hover:bg-primary-800 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm  px-4 py-2.5 justify-center"
                           >
                             Confirm changes
                           </button>
                           <button
-                            onClick={openConfirmDelete}
+                            type="button"
+                            onClick={openDelete}
                             class="text-zinc-100 items-center bg-red-700 hover:bg-primary-800 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-4 py-2.5 ml-4 justify-center"
                           >
                             Delete product
@@ -465,10 +473,7 @@ export default function AdminProducts() {
                     </div>
                     <div class="flex">
                       <button
-                        onClick={() => {
-                          closeConfirmAddWindow();
-                          closeAddWindow();
-                        }}
+                        onClick={handleSend}
                         type="button"
                         class="text-white bg-gray-800 hover:bg-gray-900 focus:ring-4 focus:outline-none focus:ring-gray-300 font-medium rounded-lg text-xs px-3 py-1.5 me-2 text-center inline-flex items-center"
                       >
@@ -510,7 +515,7 @@ export default function AdminProducts() {
                     </div>
                     <div class="flex">
                       <button
-                        onClick={closeConfirmEdit}
+                        onClick={handleUpdate}
                         type="button"
                         class="text-white bg-gray-800 hover:bg-gray-900 focus:ring-4 focus:outline-none focus:ring-gray-300 font-medium rounded-lg text-xs px-3 py-1.5 me-2 text-center inline-flex items-center"
                       >
@@ -553,9 +558,7 @@ export default function AdminProducts() {
                     <div class="flex">
                       <button
                         onClick={() => {
-                          closeConfirmDelete();
-                          closeEditWindow();
-                        }}
+                          handleDelete()}}
                         type="button"
                         class="text-white bg-red-800 hover:bg-red-900 focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-lg text-xs px-3 py-1.5 me-2 text-center inline-flex items-center"
                       >
