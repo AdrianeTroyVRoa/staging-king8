@@ -3,16 +3,19 @@ const {
   createProduct,
   getProductById,
   getAllProducts,
+  updateProduct,
+  deleteProduct,
 } = require("../prisma/queries/productQueries");
 
 const { Router } = require("express");
-const router = Router();
+const productRouter = Router();
 
 const path = require("path");
 
 const projectPath = path.resolve(__dirname, "..");
 //const imgFolderPath = path.join(projectPath, "public/img/products"); //path to the image folder
 
+//adding product
 async function addProduct(product) {
   try {
     const newProduct = await createProduct({
@@ -23,24 +26,10 @@ async function addProduct(product) {
     });
     const theProduct = await getProductById(newProduct.id);
     console.log(theProduct);
+    return "Added to DB";
   } catch (error) {
     return new Error("Failed to process data: " + error.message);
   }
-}
-
-const sampleProduct = {
-  name: "Plastic Chair",
-  num_left: 1500,
-  description: "Chair made of premium plastic",
-  img_src: "something.png",
-};
-
-console.log(sampleProduct);
-
-try {
-  addProduct(sampleProduct);
-} catch (Error) {
-  console.log(Error.message);
 }
 
 async function showProducts() {
@@ -48,6 +37,23 @@ async function showProducts() {
   console.log(await getAllProducts());
 }
 
-showProducts();
+//showProducts();
+productRouter.post("/add-product", async (req, res) => {
+  const newProduct = {
+    name: req.body.name,
+    num_left: req.body.num_left,
+    description: req.body.description,
+    img_src: req.body.img_src,
+  };
 
-module.exports = { addProduct, showProducts, router };
+  try {
+    await addProduct(newProduct);
+  } catch (error) {
+    console.log(error);
+    return res.sendStatus(500);
+  }
+
+  return res.sendStatus(200);
+});
+
+module.exports = { addProduct, showProducts, productRouter };
