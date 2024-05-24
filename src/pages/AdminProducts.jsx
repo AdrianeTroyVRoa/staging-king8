@@ -1,27 +1,135 @@
 import { createSignal } from "solid-js";
+import { Toaster } from "solid-toast";
+import * as yup from "yup";
 import pipes from "../assets/Pipes_King8.png";
 import AdminHeader from "../components/AdminHeader";
 
+const schema = yup.object().shape({
+  product_name: yup
+  .string()
+  .min(2, "Name must be more than 2 characters")
+  .max(40, "Name must be less than 40 characters")
+  .required("Product name is required"),
+
+  num_left: yup
+  .number()
+  .required("Number of items left is required"),
+
+  description: yup
+  .string()
+  .required("Description is required")
+});
+
 export default function AdminProducts() {
+  const [productName, setProductName] = createSignal("");
+  const [numLeft, setNumLeft] = createSignal("");
+  const [description, setDescription] = createSignal("");
+
   const [isEditModalOpen, setIsEditModalOpen] = createSignal(false);
   const [isAddModalOpen, setIsAddModalOpen] = createSignal(false);
   const [isConfirmModalOpen, setIsConfirmModalOpen] = createSignal(false);
   const [isConfirmEditOpen, setIsConfirmEditOpen] = createSignal(false);
   const [isConfirmDeleteOpen, setIsConfirmDeleteOpen] = createSignal(false);
 
-  const [addFormData, setAddFormData] = createSignal({
-    product_name: "",
-    quantity: "",
-    variations: "",
-    description: "",
-  });
+  const handleSend = async (e) => {
+    console.log("Finshed add products form")
+    e.preventDefault();
+    const addFormData = {
+      product_name: productName(),
+      num_left: numLeft(),
+      description: description(),
+    };
 
-  const [updateForm, setUpdateForm] = createSignal({
-    product_name: "",
-    quantity: "",
-    variations: "",
-    description: "",
-  });
+    try{
+      await schema.validate(addFormData, { abortEarly: false });
+      const response = fetch("http://localhost:5000/add-product", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(addFormData),
+      });
+      
+      
+        if(response.ok){
+          console.log("Product successfully added");
+          setProductName("");
+          setNumLeft("");
+          setDescription("");
+          
+        } else{
+          console.error("Failed to add product");
+        }
+
+    } catch(err) {
+      console.error("Error:", err.message);
+    }
+  };
+  
+    
+  const handleUpdate = async (e) => {
+    e.preventDefault();
+    const updateFormData = {
+      name: productName(),
+      num_left: numLeft(),
+      description: description(),
+    };
+
+    try{
+      await schema.validate(updateFormData);
+      const response = fetch("https://localhost:5000/update-product", {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(updateFormData),
+      }).then((response)=>{
+        if(response.ok){
+          console.log("Product updated successfully");
+          
+        } else{
+          console.error("Error updating product");
+          throw new Error("Error updating product");
+        }
+      });
+
+      toast.promise(response, {
+        loading: "Updating product",
+        success: "Product successfully updated",
+        error: "Error updating product",
+      });
+    } catch(err){
+      if(err instanceof yup.ValidationError){
+        const errorMessages = {};
+        err.inner.forEach((error) => {
+          errorMessages[error.path] = error.message;
+        })
+      }
+    }
+  };
+
+  const handleDelete = async (e) => {
+    try{
+      const response = fetch("https://localhost:5000/delete-product", {
+        method: "DELETE",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({name: productName()}),
+      }).then((response)=>{
+        if(response.ok){
+          console.log("Product deleted successfully");
+          setProductName("");
+          setNumLeft("");
+          setDescription("");
+        } else {
+          console.error("Delete failed");
+          throw new Error("Delete failed");
+        }
+      });
+      toast.promise(response, {
+        loading: "Deleting product",
+        success: "Product successfully deleted",
+        error: "Error deleting product",
+      });
+    } catch (err){
+      console.err(err);
+    }
+  };
 
   const openEditWindow = () => setIsEditModalOpen(true);
   const closeEditWindow = () => setIsEditModalOpen(false);
@@ -34,29 +142,7 @@ export default function AdminProducts() {
   const openConfirmDelete = () => setIsConfirmDeleteOpen(true);
   const closeConfirmDelete = () => setIsConfirmDeleteOpen(false);
 
-  const handleInputChange = (e) => {
-    const { name, value } = e.target;
-    setAddFormData((prev) => ({ ...prev, [name]: value }));
-  };
-
-  const handleSend = (e) => {
-    e.preventDefault();
-    const { product_name, quantity, variations, description } = addFormData();
-    if (!product_name && !quantity && !variations && !description) {
-      openConfirmAddWindow();
-    } else {
-      alert("Fill in missing blanks.");
-    }
-  };
-  const handleUpdate = (e) => {
-    e.preventDefault();
-    const { product_name, quantity, variations, description } = updateForm();
-    if (!product_name && !quantity && !variations && !description) {
-      openConfirmEdit();
-    } else {
-      alert("Fill in missing blanks");
-    }
-  };
+  
 
   return (
     <div className="relative bg-zinc-100 w-full h-full sm:w-full sm:h-screen">
@@ -118,6 +204,7 @@ export default function AdminProducts() {
                       <button
                         onClick={openEditWindow}
                         className="border-t-0 px-6 align-center border-l-0 border-r-0 text-xs underline whitespace-nowrap p-4"
+                        type="button"
                       >
                         Edit
                       </button>
@@ -174,51 +261,36 @@ export default function AdminProducts() {
                           <div>
                             <label
                               for="name"
-                              class="block mb-2 text-sm font-medium text-gray-900 "
+                              class="block mb-2 text-sm font-medium text-gray-900"
                             >
                               Product Name
                             </label>
                             <input
                               type="text"
-                              name="firstname"
+                              name="name"
                               id="product_name"
-                              value={addFormData().product_name}
+                              value={productName()}
+                              onInput={(e)=>setProductName(e.target.value)}
                               class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5"
                               placeholder="Type product name"
-                              required=""
+                              required
                             />
                             <div className="mt-4">
                               <label
                                 for="brand"
                                 class="block mb-2 text-sm font-medium text-gray-900   "
                               >
-                                Quantity
+                                Items left:
                               </label>
                               <input
                                 type="text"
-                                name="lastname"
-                                id="quantity"
-                                value={addFormData().quantity}
+                                name="num_left"
+                                id="num_left"
+                                value={numLeft()}
+                                onInput={(e)=>setNumLeft(e.target.value)}
                                 class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5"
                                 placeholder="Type quantity"
-                                required=""
-                              />
-                            </div>
-                            <div className="mt-4">
-                              <label
-                                for="price"
-                                class="block mb-2 text-sm font-medium text-gray-900"
-                              >
-                                Variations
-                              </label>
-                              <input
-                                type="text"
-                                name="employeeid"
-                                id="variations"
-                                value={addFormData().variations}
-                                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 "
-                                placeholder="Type product variants"
-                                required=""
+                                required
                               />
                             </div>
                           </div>
@@ -232,11 +304,12 @@ export default function AdminProducts() {
                             </label>
                             <textarea
                               id="description"
-                              value={addFormData().description}
+                              value={description()}
+                              onInput={(e)=>setDescription(e.target.value)}
                               rows="6"
                               className="block p-2.5 w-full text-sm text-blue-950 bg-grey-50 rounded-lg border border-gray-300 focus:ring-primary-500 focus:border-primary-500"
                               placeholder="Your description here"
-                              required=""
+                              required
                             ></textarea>
                           </div>
                         </div>
@@ -308,9 +381,9 @@ export default function AdminProducts() {
                             </label>
                             <input
                               type="text"
-                              name="firstname"
-                              id="first_name"
-                              value={updateForm().product_name}
+                              name="name"
+                              id="name"
+                              value={name}
                               class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5"
                               placeholder="Type product name"
                               required=""
@@ -320,32 +393,15 @@ export default function AdminProducts() {
                                 for="brand"
                                 class="block mb-2 text-sm font-medium text-gray-900   "
                               >
-                                Quantity
+                                Items left
                               </label>
                               <input
                                 type="text"
-                                name="lastname"
-                                id="last_name"
-                                value={updateForm().quantity}
+                                name="num_left"
+                                id="num_left"
+                                value={numLeft}
                                 class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5"
                                 placeholder="Type quantity"
-                                required=""
-                              />
-                            </div>
-                            <div className="mt-4">
-                              <label
-                                for="price"
-                                class="block mb-2 text-sm font-medium text-gray-900"
-                              >
-                                Variations
-                              </label>
-                              <input
-                                type="text"
-                                name="employeeid"
-                                id="employee_id"
-                                value={updateForm().variations}
-                                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 "
-                                placeholder="Type product variants"
                                 required=""
                               />
                             </div>
@@ -361,7 +417,7 @@ export default function AdminProducts() {
                             <textarea
                               id="description"
                               rows="6"
-                              value={updateForm().description}
+                              value={description}
                               className="block p-2.5 w-full text-sm text-blue-950 bg-grey-50 rounded-lg border border-gray-300 focus:ring-primary-500 focus:border-primary-500"
                               placeholder="Your description here"
                             ></textarea>
@@ -521,7 +577,9 @@ export default function AdminProducts() {
             </div>
           </div>
         </div>
+        <Toaster/>
       </section>
     </div>
+    
   );
 }

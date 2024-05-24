@@ -19,4 +19,21 @@ async function getAllProducts() {
   return prisma.product.findMany();
 }
 
-module.exports = { createProduct, getProductById, getAllProducts };
+async function updateProduct() {
+  return prisma.product.update({
+    where:{
+      id:productId,
+    },
+    data: updatedData
+  })
+}
+
+async function deleteProduct(){
+  return prisma.product.delete({
+    where:{
+      id:productId,
+    }
+  })
+}
+
+module.exports = { createProduct, getProductById, getAllProducts, updateProduct, deleteProduct };

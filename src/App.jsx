@@ -6,7 +6,7 @@ import NotFound from "./pages/NotFound";
 import Products from "./pages/Products";
 import Register from "./pages/Register";
 import { Route } from "@solidjs/router";
-import IndividualProducts from "./pages/IndividualProducts";
+//import IndividualProducts from "./pages/IndividualProducts";
 import InquireNow from "./pages/InquiryForm";
 
 function App() {
@@ -33,6 +33,7 @@ function App() {
           isAuthenticated() ? <AdminProducts /> : <div>Not authorized</div>
         }
       />
+      
       <Route path="*" component={NotFound} />
     </>
   );
