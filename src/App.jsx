@@ -1,4 +1,3 @@
-import { Route } from "@solidjs/router";
 import { createSignal } from "solid-js";
 import AdminProducts from "./pages/AdminProducts";
 import Home from "./pages/Home";
