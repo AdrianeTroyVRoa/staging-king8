@@ -7,7 +7,7 @@ import Products from "./pages/Products";
 import Register from "./pages/Register";
 import { Route } from "@solidjs/router";
 import IndividualProducts from "./pages/IndividualProducts";
-import InquireNow from "./components/InquiryForm";
+import InquireNow from "./pages/InquiryForm";
 
 function App() {
   const [isAuthenticated, setIsAuthenticated] = createSignal(
