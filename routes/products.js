@@ -23,16 +23,6 @@ const productValidation = [
   body("description").escape().notEmpty()
 ];
 
-async function addProduct(product) {
-  const newProduct = await createProduct({
-    product_name: product.product_name,
-    mobile_num: product.num_left,
-    first_name: product.description,
-  });
-  console.log("New product")
-  return newProduct;
-}
-
 productRouter.post("/add-product", productValidation, async (req, res) => {
   const errors = validationResult(req);
   if(!errors.isEmpty()){

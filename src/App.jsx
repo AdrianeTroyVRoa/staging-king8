@@ -1,3 +1,4 @@
+import { Route } from "@solidjs/router";
 import { createSignal } from "solid-js";
 import AdminProducts from "./pages/AdminProducts";
 import Home from "./pages/Home";
@@ -5,7 +6,6 @@ import Login from "./pages/Login";
 import NotFound from "./pages/NotFound";
 import Products from "./pages/Products";
 import Register from "./pages/Register";
-import { Route } from "@solidjs/router";
 
 function App() {
   const [isAuthenticated, setIsAuthenticated] = createSignal(
@@ -30,6 +30,7 @@ function App() {
           isAuthenticated() ? <AdminProducts /> : <div>Not authorized</div>
         }
       />
+      
       <Route path="*" component={NotFound} />
     </>
   );
