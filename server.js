@@ -16,35 +16,6 @@ app.use(loginRouter);
 app.use(inquiryRouter);
 app.use(productRouter);
 
-// Your reCAPTCHA secret key
-const secretKey = "6LcD2OEpAAAAACLlQB6HjvG1DlZBASDe-98SKPTr";
-
-// CAPTCHA verification route
-app.post("/verify-captcha", (req, res) => {
-  const captchaResponse = req.body["captchaResponse"];
-
-  // Verify CAPTCHA with Google reCAPTCHA API
-  request.post(
-    "https://www.google.com/recaptcha/api/siteverify",
-    {
-      form: {
-        secret: secretKey,
-        response: captchaResponse,
-      },
-    },
-    (error, response, body) => {
-      body = JSON.parse(body);
-      if (!error && response.statusCode == 200 && body.success) {
-        // CAPTCHA verification successful
-        res.json({ success: true });
-      } else {
-        // CAPTCHA verification failed
-        res.json({ success: false });
-      }
-    },
-  );
-});
-
 //api workings
 const mockUsers = [
   { id: 1, firstName: "Heather", lastName: "Parks", mobileNum: "09123456789" },
