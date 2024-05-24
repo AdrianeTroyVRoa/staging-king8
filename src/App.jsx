@@ -1,4 +1,7 @@
+
+import { Route } from "@solidjs/router";
 import { createSignal } from "solid-js";
+
 import AdminProducts from "./pages/AdminProducts";
 import AdminInquiry from "./pages/AdminInquiry";
 import Home from "./pages/Home";
@@ -6,9 +9,9 @@ import Login from "./pages/Login";
 import NotFound from "./pages/NotFound";
 import Products from "./pages/Products";
 import Register from "./pages/Register";
-import { Route } from "@solidjs/router";
-//import IndividualProducts from "./pages/IndividualProducts";
 import InquireNow from "./pages/InquiryForm";
+import About from "./pages/AboutUs";
+//import IndividualProducts from "./pages/IndividualProducts";
 
 function App() {
   const [isAuthenticated, setIsAuthenticated] = createSignal(
@@ -27,6 +30,7 @@ function App() {
       />
       <Route path="/inquiry" component={InquireNow} />
       <Route path="/sign-up" component={Register} />
+      <Route path="/about" component={About} />
       <Route path="/products" component={Products} />
       <Route
         path="/admin"
