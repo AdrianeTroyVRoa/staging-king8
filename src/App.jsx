@@ -35,9 +35,9 @@ function App() {
           <AdminHeader {...props} setIsAuthenticated={setIsAuthenticated} />
         )}
       />
-      <Route path="/inquiry" component={InquireNow} />
       <Route path="/sign-up" component={Register} />
-      <Route path="/about" component={About} />
+      <Route path="/about us" component={About} />
+      <Route path="/contact us" component={InquireNow} />
       <Route path="/products" component={Products} />
       <Route
         path="/admin"
