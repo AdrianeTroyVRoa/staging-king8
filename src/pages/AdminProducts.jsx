@@ -71,7 +71,14 @@ export default function AdminProducts() {
     } catch(err) {
       console.error("Error:", err.message);
     }
+
+    
   };
+
+  const closeAddProduct = () => {
+    setIsAddModalOpen(false);
+    setIsConfirmModalOpen(false);
+  }
   
   const openUpdate = () =>{
     console.log("Confirming product changes")

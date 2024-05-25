@@ -1,13 +1,26 @@
 const express = require("express");
 const path = require("path");
 const app = express();
+
 const regisRouter = require("./routes/register.js");
 const loginRouter = require("./routes/login.js");
+
+
+const cors = require("cors");
+app.use(
+  cors({
+    origin: "http://localhost:3000",
+    credentials: true,
+  }),
+);
+
+const productRouter = require("./routes/products.js");
 
 app.use(express.json());
 app.use(express.static(path.join(__dirname, "dist")));
 app.use(regisRouter);
 app.use(loginRouter);
+app.use(productRouter);
 
 //api workings
 const mockUsers = [
