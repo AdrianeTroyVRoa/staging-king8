@@ -60,4 +60,14 @@ inquiryRouter.post("/submit-inquiry", async (req, res) => {
   return res.sendStatus(200);
 });
 
+inquiryRouter.get('/get-inquiries', async(req, res) => {
+  try{
+    const inquiries = await getAllInquiries();
+    return res.status(200).json(inquiries)
+  } catch(err){
+    console.error(err)
+    return res.sendStatus(400)
+  }
+})
+
 module.exports = inquiryRouter;

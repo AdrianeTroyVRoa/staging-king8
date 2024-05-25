@@ -13,6 +13,7 @@ import AdminHeader from "./components/AdminHeader";
 //import InquireNow from "./components/InquiryForm";
 import InquireNow from "./pages/InquiryForm";
 import About from "./pages/AboutUs";
+import AdminInquiry from "./pages/AdminInquiry";
 
 function App() {
   const [isAuthenticated, setIsAuthenticated] = createSignal(false);
@@ -45,6 +46,7 @@ function App() {
       <Route path="/about us" component={About} />
       <Route path="/contact us" component={InquireNow} />
       <Route path="/products" component={Products} />
+      <Route path="/inquiry" component={AdminInquiry} />
       <Route
         path="/admin"
         component={() =>
