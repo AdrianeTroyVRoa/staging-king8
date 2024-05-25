@@ -51,7 +51,7 @@ function App() {
           isAuthenticated() ? (
             <AdminProducts />
           ) : (
-            <Login setIsAuthenticated={setIsAuthenticated}
+            <Login setIsAuthenticated={setIsAuthenticated} />
           )
         }
       />
