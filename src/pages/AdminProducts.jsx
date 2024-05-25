@@ -57,6 +57,9 @@ export default function AdminProducts() {
       
         if(response.ok){
           console.log("Product successfully added");
+          const newProduct = await response.json();
+          setProducts([...products(), newProduct]);
+          
           setProductName('');
           setNumLeft('');
           setDescription('');

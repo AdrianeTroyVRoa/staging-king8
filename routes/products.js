@@ -44,8 +44,15 @@ let products = [
   {id:1, image_url: "http://placekitten.com/200/300", product_name:"Item 1", num_left: 10, description:"Description 1"}
 ];
 
-productRouter.get("/products", (req, res)=>{
-  res.json(products);
+productRouter.get("/products", async (req, res)=>{
+  try {
+    // Fetch products from the database
+    const allProducts = await getAllProducts();
+    res.json(allProducts);
+  } catch (error) {
+    console.log(error);
+    return res.status(500).json({ error: "Failed to fetch products" });
+  }
 })
 
 productRouter.put("/edit-product/:id", productValidation, async(req, res) =>{
