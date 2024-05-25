@@ -38,6 +38,7 @@ export default function AdminProducts() {
   }
 
   const handleSend = async (e) => {
+    
     console.log("Finshed add products form")
     e.preventDefault();
     
@@ -72,7 +73,7 @@ export default function AdminProducts() {
       console.error("Error:", err.message);
     }
 
-    
+    closeAddProduct();
   };
 
   const closeAddProduct = () => {
