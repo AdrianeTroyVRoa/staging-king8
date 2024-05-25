@@ -24,6 +24,7 @@ export default function AdminProducts() {
   const [productName, setProductName] = createSignal("");
   const [numLeft, setNumLeft] = createSignal("");
   const [description, setDescription] = createSignal("");
+  const [imageUrl, setImageUrl] = createSignal("");
 
   const [isEditModalOpen, setIsEditModalOpen] = createSignal(false);
   const [isAddModalOpen, setIsAddModalOpen] = createSignal(false);
@@ -39,15 +40,17 @@ export default function AdminProducts() {
   const handleSend = async (e) => {
     console.log("Finshed add products form")
     e.preventDefault();
+    
     const addFormData = {
       product_name: productName(),
       num_left: numLeft(),
       description: description(),
+      image_url: imageUrl(),
     };
 
     try{
       await schema.validate(addFormData, { abortEarly: false });
-      const response = fetch("http://localhost:5000/add-product", {
+      const response = await fetch('http://localhost:5000/add-product', {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(addFormData),
@@ -56,9 +59,10 @@ export default function AdminProducts() {
       
         if(response.ok){
           console.log("Product successfully added");
-          setProductName("");
-          setNumLeft("");
-          setDescription("");
+          setProductName('');
+          setNumLeft('');
+          setDescription('');
+          setImageUrl('');
           
         } else{
           console.error("Failed to add product");
@@ -74,13 +78,14 @@ export default function AdminProducts() {
     setIsConfirmEditOpen(true);
   };
 
-  const handleUpdate = async (productId) => {
+  const handleUpdate = async (e) => {
     console.log("Finshed update products form")
     e.preventDefault();
     const updateFormData = {
       product_name: productName(),
       num_left: numLeft(),
       description: description(),
+      image_url: imageUrl(),
     };
 
     try{
@@ -121,7 +126,6 @@ export default function AdminProducts() {
     try{
       const response = fetch("http://localhost:5000/delete-product/${productId}", {
         method: "DELETE",
-        headers: { "Content-Type": "application/json" },
       });
 
         if(response.ok){
@@ -249,20 +253,7 @@ export default function AdminProducts() {
                             </svg>
                             <span class="sr-only">Close modal</span>
                           </button>
-                          <div className="-mt-6">
-                            <div class="relative w-48 h-48 mt-8 overflow-hidden bg-zinc-100 border border-gray-300 rounded-t-lg"></div>
-                            <label
-                              class="text-blue-950 inline-flex border border-gray-300 justify-center items-center bg-gray-200 hover:bg-amber-400 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-b-lg text-sm w-48 py-2.5 text-center"
-                              for="user_avatar"
-                            >
-                              Upload picture
-                            </label>
-                            <input
-                              class="hidden"
-                              id="user_avatar"
-                              type="file"
-                            />
-                          </div>
+                          
                           <div>
                             <label
                               for="name"
@@ -295,6 +286,24 @@ export default function AdminProducts() {
                                 onInput={(e)=>setNumLeft(e.target.value)}
                                 class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5"
                                 placeholder="Type quantity"
+                                required
+                              />
+                            </div>
+                            <div className="mt-4">
+                              <label
+                                for="brand"
+                                class="block mb-2 text-sm font-medium text-gray-900   "
+                              >
+                                Image URL:
+                              </label>
+                              <input
+                                type="text"
+                                name="image_url"
+                                id="image_url"
+                                value={imageUrl()}
+                                onInput={(e)=>setImageUrl(e.target.value)}
+                                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5"
+                                placeholder="Enter link"
                                 required
                               />
                             </div>
@@ -364,20 +373,7 @@ export default function AdminProducts() {
                             </svg>
                             <span class="sr-only">Close modal</span>
                           </button>
-                          <div className="-mt-6">
-                            <div class="relative w-48 h-48 mt-8 overflow-hidden bg-zinc-100 border border-gray-300 rounded-t-lg"></div>
-                            <label
-                              class="text-blue-950 inline-flex border border-gray-300 justify-center items-center bg-gray-200 hover:bg-amber-400 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-b-lg text-sm w-48 py-2.5 text-center"
-                              for="user_avatar"
-                            >
-                              Upload picture
-                            </label>
-                            <input
-                              class="hidden"
-                              id="user_avatar"
-                              type="file"
-                            />
-                          </div>
+                          
                           <div>
                             <label
                               for="name"
@@ -409,6 +405,24 @@ export default function AdminProducts() {
                                 class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5"
                                 placeholder="Type quantity"
                                 required=""
+                              />
+                            </div>
+                            <div className="mt-4">
+                              <label
+                                for="brand"
+                                class="block mb-2 text-sm font-medium text-gray-900   "
+                              >
+                                Image URL:
+                              </label>
+                              <input
+                                type="text"
+                                name="image_url"
+                                id="image_url"
+                                value={imageUrl()}
+                                onInput={(e)=>setImageUrl(e.target.value)}
+                                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5"
+                                placeholder="Enter link"
+                                required
                               />
                             </div>
                           </div>
