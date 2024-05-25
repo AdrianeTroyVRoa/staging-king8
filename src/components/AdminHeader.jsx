@@ -1,22 +1,26 @@
+import { createSignal } from "solid-js";
 import logo from "../assets/king8-logo.png";
 
-export default function AdminHeader(props) {
+export default function AdminHeader({ setIsAuthenticated }) {
+  const [error, setError] = createSignal(null);
+
   const handleLogout = async () => {
     try {
       const response = await fetch("http://localhost:5000/logout-user", {
-        method: "POST",
-        credentials: "include", // Include cookies in the request
+        method: "GET",
+        credentials: "include", 
       });
 
-      if (response.ok) {
-        console.log("Logged out successfully");
-
-        window.location.href = "/";
-      } else {
-        console.error("Logout failed");
+      if (!response.ok) {
+        const data = await response.json();
+        throw new Error(data.message || "Logout failed");
       }
-    } catch (error) {
-      console.error("Error during logout:", error);
+
+      // Set authentication state to false
+      setIsAuthenticated(false);
+      window.location.href = "/";
+    } catch (err) {
+      setError(err.message);
     }
   };
 

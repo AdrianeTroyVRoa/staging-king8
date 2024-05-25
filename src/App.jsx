@@ -1,5 +1,5 @@
 import { Route } from "@solidjs/router";
-import { createSignal } from "solid-js";
+import { createSignal, onMount } from "solid-js";
 
 import AdminProducts from "./pages/AdminProducts";
 //import AdminInquiry from "./pages/AdminInquiry";
@@ -15,9 +15,22 @@ import InquireNow from "./pages/InquiryForm";
 import About from "./pages/AboutUs";
 
 function App() {
-  const [isAuthenticated, setIsAuthenticated] = createSignal(
-    localStorage.getItem("isAuthenticated") === "true",
-  );
+  const [isAuthenticated, setIsAuthenticated] = createSignal(false);
+
+  onMount(async () => {
+    try {
+      const response = await fetch("http://localhost:5000/auth/check-auth", {
+        method: "GET",
+        credentials: "include",
+      });
+
+      if (response.ok) {
+        setIsAuthenticated(true);
+      }
+    } catch (err) {
+      setIsAuthenticated(false);
+    }
+  });
 
   return (
     <>
@@ -25,27 +38,23 @@ function App() {
       <Route path="/home" component={Home} />
       <Route
         path="/login"
-        component={(props) => (
-          <Login {...props} setIsAuthenticated={setIsAuthenticated} />
-        )}
-      /> //Problem hereee
-      <Route
-        path="/logout"
-        component={(props) => (
-          <AdminHeader {...props} setIsAuthenticated={setIsAuthenticated} />
-        )}
+        component={() => <Login setIsAuthenticated={setIsAuthenticated} />}
       />
+      //Problem hereee
       <Route path="/sign-up" component={Register} />
       <Route path="/about us" component={About} />
       <Route path="/contact us" component={InquireNow} />
       <Route path="/products" component={Products} />
       <Route
         path="/admin"
-        component={
-          isAuthenticated() ? <AdminProducts /> : <div>Not authorized</div>
+        component={() =>
+          isAuthenticated() ? (
+            <AdminProducts />
+          ) : (
+            <Login setIsAuthenticated={setIsAuthenticated} />
+          )
         }
       />
-      
       <Route path="*" component={NotFound} />
     </>
   );
