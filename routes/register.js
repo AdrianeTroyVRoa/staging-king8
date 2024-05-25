@@ -15,17 +15,17 @@ const { parsePhoneNumber, isValidNumber } = require("libphonenumber-js");
 const bcrypt = require("bcrypt");
 const saltRounds = 10;
 
-const cors = require("cors");
+//const cors = require("cors");
 const { body, validationResult } = require("express-validator");
 const bodyParser = require("body-parser");
 regisRouter.use(bodyParser.urlencoded({ extended: true }));
-regisRouter.use(
-  cors({
-    origin: "http://localhost:3000",
-    methods: ["POST"],
-    allowedHeaders: ["Content-Type"],
-  }),
-);
+//regisRouter.use(
+//  cors({
+//    origin: "http://localhost:3000",
+//    methods: ["POST"],
+//    allowedHeaders: ["Content-Type"],
+//  }),
+//);
 
 const signupValidation = [
   body("first_name").escape().notEmpty(),

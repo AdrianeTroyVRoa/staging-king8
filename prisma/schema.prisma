@@ -22,8 +22,8 @@ model User {
   password   String?
   createdAt  DateTime    @default(now())
   updatedAt  DateTime    @updatedAt @default(now()) 
-  Customer   Customer[]
-  Employee   Employee[]
+  Customer   Customer?
+  Employee   Employee?
 }
 
 model Customer {
@@ -31,14 +31,14 @@ model Customer {
   isVerified Boolean     @default(false)
   Wishlist   Wishlist[]
   user_id    User        @relation(fields: [userId], references: [id])
-  userId     Int
+  userId     Int @unique
 }
 
 model Employee {
   id          Int    @id @default(autoincrement())
   employee_id String @unique
   user_id     User   @relation(fields: [userId], references: [id])
-  userId      Int
+  userId      Int @unique
 }
 
 model Product {
