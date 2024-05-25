@@ -95,7 +95,7 @@ export default function AdminProducts() {
   createEffect(()=>{
     fetchProducts();
   });
-  const openUpdate = () =>{
+  const openUpdate = (product) =>{
     console.log("Confirming product changes")
     setIsConfirmEditOpen(true);
   };
@@ -142,8 +142,9 @@ export default function AdminProducts() {
   }
 
   const handleDelete = async (productId) => {
+    
     try{
-      const response = fetch("http://localhost:5000/delete-product/${productId}", {
+      const response = await fetch(`http://localhost:5000/delete-product/${productId}`, {
         method: "DELETE",
       });
 
@@ -229,7 +230,7 @@ export default function AdminProducts() {
               <td className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4">{product.num_left}</td>
               <td>
               <button
-                        onClick={openEditWindow}
+                        onClick={()=>openEditWindow(product)}
                         className="border-t-0 px-6 align-center border-l-0 border-r-0 text-xs underline whitespace-nowrap p-4"
                         type="button"
                       >
@@ -406,7 +407,7 @@ export default function AdminProducts() {
                               id="name"
                               value={productName()}
                               class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5"
-                              placeholder="Type product name"
+                              placeholder="Type name"
                               required=""
                             />
                             <div className="mt-4">
@@ -590,8 +591,7 @@ export default function AdminProducts() {
                     </div>
                     <div class="flex">
                       <button
-                        onClick={() => {
-                          handleDelete()}}
+                        onClick={handleDelete}
                         type="button"
                         class="text-white bg-red-800 hover:bg-red-900 focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-lg text-xs px-3 py-1.5 me-2 text-center inline-flex items-center"
                       >
