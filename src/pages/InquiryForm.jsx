@@ -51,7 +51,7 @@ function InquireNow() {
     let templateParams = {
       from_name: parms.name,
       to_email: parms.email,
-      phoneNum: parms.setPhoneNum,
+      phoneNum: parms.phoneNum,
       subject: parms.subject,
       message: parms.message,
     };
@@ -61,8 +61,8 @@ function InquireNow() {
       name: parms.name,
       subject: parms.subject,
       mobile_num: parms.phoneNum,
+      email: parms.email,
       msg: parms.message,
-      status: "PENDING",
     };
 
     emailjs
@@ -105,7 +105,7 @@ function InquireNow() {
 
       toast.promise(response, {
         loading: "Registering your account",
-        success: "Message sent successfully",
+        success: "Message saved to servers",
         error: "Message sent successfully but with errors",
       });
     } catch (err) {
@@ -208,7 +208,7 @@ function InquireNow() {
                   value={phoneNum()}
                   onInput={(e) => setPhoneNum(e.target.value)}
                   className="w-full p-2.5 rounded-lg border shadow-sm focus:ring-primary-500 focus:border-primary-500"
-                  placeholder="+63 XXX XXXX XXXX"
+                  placeholder="+639XXXXXXXXXX"
                   required
                 />
               </div>
