@@ -1,5 +1,5 @@
 //db prisma
-const { createProduct, updateProduct, deleteProduct } = require("../prisma/queries/productQueries");
+const { createProduct, updateProduct, deleteProduct, getAllProducts } = require("../prisma/queries/productQueries");
 const express = require("express");
 const { body, validationResult } = require("express-validator");
 const productRouter = express.Router();
@@ -30,16 +30,23 @@ productRouter.post("/add-product", productValidation, async (req, res) => {
     description: description,
     image_src: image_url,
   };
-
   try{
     await createProduct(newProduct);
-    console.log("Added product")
+    console.log("Added product", newProduct)
     return res.status(201).json({ message: "Product added successfully"});
   } catch (error){
     console.log(error);
     return res.status(500).json({ error: "Failed to add product" });
   }
 });
+
+let products = [
+  {id:1, image_url: "http://placekitten.com/200/300", product_name:"Item 1", num_left: 10, description:"Description 1"}
+];
+
+productRouter.get("/products", (req, res)=>{
+  res.json(products);
+})
 
 productRouter.put("/edit-product/:id", productValidation, async(req, res) =>{
   const errors = validationResult(req);

@@ -1,7 +1,6 @@
-import { createSignal } from "solid-js";
+import { createEffect, createSignal } from "solid-js";
 import { Toaster } from "solid-toast";
 import * as yup from "yup";
-import pipes from "../assets/Pipes_King8.png";
 import AdminHeader from "../components/AdminHeader";
 
 const schema = yup.object().shape({
@@ -25,6 +24,7 @@ export default function AdminProducts() {
   const [numLeft, setNumLeft] = createSignal("");
   const [description, setDescription] = createSignal("");
   const [imageUrl, setImageUrl] = createSignal("");
+  const [products, setProducts] = createSignal([]);
 
   const [isEditModalOpen, setIsEditModalOpen] = createSignal(false);
   const [isAddModalOpen, setIsAddModalOpen] = createSignal(false);
@@ -36,9 +36,7 @@ export default function AdminProducts() {
     console.log("Confirm adding product");
     setIsConfirmModalOpen(true);
   }
-
   const handleSend = async (e) => {
-    
     console.log("Finshed add products form")
     e.preventDefault();
     
@@ -57,7 +55,6 @@ export default function AdminProducts() {
         body: JSON.stringify(addFormData),
       });
       
-      
         if(response.ok){
           console.log("Product successfully added");
           setProductName('');
@@ -72,15 +69,29 @@ export default function AdminProducts() {
     } catch(err) {
       console.error("Error:", err.message);
     }
-
     closeAddProduct();
   };
-
   const closeAddProduct = () => {
     setIsAddModalOpen(false);
     setIsConfirmModalOpen(false);
   }
-  
+  const fetchProducts = async () => {
+    try{
+      const response = await fetch('http://localhost:5000/products');
+      if (response.ok) {
+        const data = await response.json();
+        setProducts(data);
+      } else {
+        console.error("Failed to fetch products");
+      }
+    } catch (error) {
+      console.error("Error fetching products:", error);
+    }
+  };
+
+  createEffect(()=>{
+    fetchProducts();
+  });
   const openUpdate = () =>{
     console.log("Confirming product changes")
     setIsConfirmEditOpen(true);
@@ -112,9 +123,6 @@ export default function AdminProducts() {
           console.error("Error updating product");
           throw new Error("Error updating product");
         }
-      
-
-    
     } catch(err){
       if(err){
         const errorMessages = {};
@@ -201,32 +209,32 @@ export default function AdminProducts() {
                       Description
                     </th>
                     <th className="px-6   text-blue-950 align-middle border border-solid border-blueGray-100 py-3 text-xs uppercase border-l-0 border-r-0 whitespace-nowrap font-semibold text-left">
+                      Items Left
+                    </th>
+                    <th className="px-6   text-blue-950 align-middle border border-solid border-blueGray-100 py-3 text-xs uppercase border-l-0 border-r-0 whitespace-nowrap font-semibold text-left">
                       ---
                     </th>
                   </tr>
                 </thead>
 
                 <tbody>
-                  <tr>
-                    <th className="border-t-0 px-6 align-middle border-l-0 border-r-0  whitespace-nowrap p-4">
-                      <img className="w-20 h-20" src={pipes} />
-                    </th>
-                    <th className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4 text-left text-blueGray-700">
-                      Pipes
-                    </th>
-                    <td className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4">
-                      Lorem ipsum dolor sit amet, consectetur adipiscing elit
-                    </td>
-                    <td>
-                      <button
+                {products().map((product) => (
+            <tr key={product.id}>
+            <td className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4">{product.image_url}</td>
+              <th className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4 text-left text-blueGray-700">{product.product_name}</th>
+              <td className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4">{product.description}</td>
+              <td className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4">{product.num_left}</td>
+              <td>
+              <button
                         onClick={openEditWindow}
                         className="border-t-0 px-6 align-center border-l-0 border-r-0 text-xs underline whitespace-nowrap p-4"
                         type="button"
                       >
                         Edit
                       </button>
-                    </td>
-                  </tr>
+              </td>
+            </tr>
+          ))}
                 </tbody>
               </table>
               {isAddModalOpen() && (
