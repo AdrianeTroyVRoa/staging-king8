@@ -28,10 +28,11 @@ async function addInquiry(inquiry) {
 
 //inquiry input
 inquiryRouter.post("/submit-inquiry", async (req, res) => {
-  const mobileNumber = req.body.mobile_number;
+  const mobileNumber = req.body.mobile_num;
   const isValidPHNum = isValidNumber(mobileNumber);
 
   if (!isValidPHNum) {
+    console.log("invalid number");
     return res.sendStatus(400);
   }
 
@@ -43,11 +44,14 @@ inquiryRouter.post("/submit-inquiry", async (req, res) => {
     subject: req.body.subject,
     email: req.body.email,
     mobile_num: transformMobileNumber,
-    additional_msg: req.body.msg,
+    msg: req.body.msg,
+    status: "PENDING",
   };
 
   try {
+    console.log("waiting...");
     await addInquiry(newInquiry);
+    console.log(newInquiry)
   } catch (error) {
     console.log(error);
     return res.sendStatus(500);

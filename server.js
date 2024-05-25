@@ -14,7 +14,8 @@ app.use(
     credentials: true,
   }),
 );
-//const inquiryRouter = require("./routes/inquiry.js");
+
+const inquiryRouter = require("./routes/inquiry.js");
 
 const logoutRouter = require("./routes/logout.js");
 //const product = require('./routes/products.js');
@@ -39,7 +40,7 @@ app.use(passport.session());
 
 app.use(regisRouter);
 app.use(loginRouter);
-//app.use(inquiryRouter);
+app.use(inquiryRouter);
 //app.use(productRouter);
 app.use(logoutRouter);
 
