@@ -1,12 +1,23 @@
 import logo from "../assets/king8-logo.png";
 
 export default function AdminHeader(props) {
-  const handleLogout = (e) => {
-    e.preventDefault();
-    localStorage.removeItem("isAuthenticated");
-    props.setIsAuthenticated(false);
-    console.log("Reached Logout");
-    window.location.href = "/";
+  const handleLogout = async () => {
+    try {
+      const response = await fetch("http://localhost:5000/logout-user", {
+        method: "POST",
+        credentials: "include", // Include cookies in the request
+      });
+
+      if (response.ok) {
+        console.log("Logged out successfully");
+
+        window.location.href = "/";
+      } else {
+        console.error("Logout failed");
+      }
+    } catch (error) {
+      console.error("Error during logout:", error);
+    }
   };
 
   return (
@@ -20,13 +31,13 @@ export default function AdminHeader(props) {
             </span>
           </a>
           <div class="flex items-center lg:order-2">
-            <a
+            <button
               href="javascript:void(0)"
               onClick={handleLogout}
               class="bg-zinc-100 text-blue-950 focus:ring-4 focus:ring-gray-300 font-medium rounded-lg text-sm px-4 lg:px-5 py-2 lg:py-2.5 mr-2 border border-spacing-2 border-blue-950 hover:bg-amber-400 hover:text-blue-950 focus:outline-none dark:focus:ring-gray-800"
             >
               LOG OUT
-            </a>
+            </button>
             <button
               data-collapse-toggle="mobile-menu-2"
               type="button"

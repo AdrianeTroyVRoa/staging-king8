@@ -1,34 +1,29 @@
-const { getUserByEmail } = require("../prisma/queries/userQueries");
-const { Router } = require("express");
-const loginRouter = Router()
+const express = require("express");
+const logoutRouter = express.Router();
 
-const bcrypt = require('bcrypt')
+logoutRouter.post("/logout-user", (req, res, next) => {
+  if (!req.user) {
+    console.error("User not authenticated");
+    return res.sendStatus(401); // Unauthorized
+  }
 
-async function matchPassKey(email) {
-  try {
-    const user = await getUserByEmail(email);
-    if (user) {
-      return user.password;
+  req.logout((err) => {
+    if (err) {
+      console.error("Error during logout:", err);
+      return next(err);
     }
-    return null;
-  } catch (err) {
-    throw err;
-  }
-}
 
-//login proper
-loginRouter.post("/login-user", async (req, res) => {
-  const email = req.body.email;
-  const pass = req.body.password;
-  const passKeyToMatch = await matchPassKey(email);
+    req.session.destroy((err) => {
+      if (err) {
+        console.error("Error destroying session:", err);
+        return next(err);
+      }
 
-  console.log("Reached login backend")
-  const isPassKeyMatched = bcrypt.compareSync(pass, passKeyToMatch)
-  if (isPassKeyMatched) {
-    return res.sendStatus(200);
-  }
-
-  return res.sendStatus(400);
+      res.clearCookie("connect.sid"); // Adjust the cookie name if necessary
+      console.log("Logout successful");
+      res.sendStatus(200); // OK
+    });
+  });
 });
 
-module.exports = loginRouter;
+module.exports = logoutRouter;

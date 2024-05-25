@@ -1,20 +1,47 @@
-// Serve HTML files
 const express = require("express");
 const path = require("path");
 const app = express();
+const session = require("express-session");
+const passport = require("passport");
+
 const regisRouter = require("./routes/register.js");
 const loginRouter = require("./routes/login.js");
+
+const cors = require("cors");
+app.use(
+  cors({
+    origin: "http://localhost:3000",
+    credentials: true,
+  }),
+);
 //const inquiryRouter = require("./routes/inquiry.js");
 
+const logoutRouter = require("./routes/logout.js");
 //const product = require('./routes/products.js');
 //const productRouter = product.productRouter;
 
 app.use(express.json());
 app.use(express.static(path.join(__dirname, "dist")));
+
+app.use(
+  session({
+    secret: "krimelsPaRin",
+    saveUninitialized: false,
+    resave: false,
+    cookie: {
+      maxAge: 60000 * 60,
+    },
+  }),
+);
+
+app.use(passport.initialize());
+app.use(passport.session());
+
 app.use(regisRouter);
 app.use(loginRouter);
-app.use(inquiryRouter);
+//app.use(inquiryRouter);
 //app.use(productRouter);
+app.use(logoutRouter);
 
 // Your reCAPTCHA secret key
 const secretKey = "6LcD2OEpAAAAACLlQB6HjvG1DlZBASDe-98SKPTr";
@@ -55,10 +82,12 @@ const mockUsers = [
 
 app.get("/api/data", (req, res) => {
   res.json({ message: "Hello from the backend!" });
+  console.log(req.session)
 });
 
 app.get("/api/users", (req, res) => {
   res.send(mockUsers);
+  console.log(req.session.id)
 });
 
 app.post("/api/users", (req, res) => {
