@@ -65,22 +65,22 @@ function InquireNow() {
       msg: parms.message,
     };
 
-//    emailjs
-//      .send(
-//        "service_king8",
-//        "template_y7jupsr",
-//        templateParams,
-//        "YMQh1o1VaUixvbnJi",
-//      )
-//      .then(
-//        () => {
-//          toast.success("Message sent successfully!");
-//        },
-//        () => {
-//          toast.error("Failed to send the message, please try again.");
-//          return;
-//        },
-//      );
+    emailjs
+      .send(
+        "service_king8",
+        "template_y7jupsr",
+        templateParams,
+        "YMQh1o1VaUixvbnJi",
+      )
+      .then(
+        () => {
+          toast.success("Message sent successfully!");
+        },
+        () => {
+          toast.error("Failed to send the message, please try again.");
+          return;
+        },
+      );
 
     //saving info to db proper
     try {
