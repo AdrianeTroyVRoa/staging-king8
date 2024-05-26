@@ -36,7 +36,7 @@ function InquireNow() {
     document.body.appendChild(emailjsScript);
   });
 
-  const sendEmail = async (e) => {
+  const sendEmail = (e) => {
     e.preventDefault();
     let parms = {
       name: name(),
@@ -55,6 +55,34 @@ function InquireNow() {
       message: parms.message,
     };
 
+    emailjs
+      .send(
+        "service_king8",
+        "template_y7jupsr",
+        templateParams,
+        "YMQh1o1VaUixvbnJi",
+      )
+      .then(
+        () => {
+          toast.success("Message sent successfully!");
+        },
+        () => {
+          toast.error("Failed to send the message, please try again.");
+        },
+      );
+  };
+
+  const saveToDB = (e) => {
+    e.preventDefault();
+    let parms = {
+      name: name(),
+      email: email(),
+      phoneNum: phoneNum(),
+      subject: subject(),
+      message: message(),
+    };
+
+
     // to save info to db
     const inquiryData = {
       name: parms.name,
@@ -66,40 +94,30 @@ function InquireNow() {
 
     //saving info to db proper
     try {
-      const response = await fetch("http://localhost:5000/submit-inquiry", {
+      const response = fetch("http://localhost:5000/submit-inquiry", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(inquiryData),
+      }).then((response) => {
+        if (response.ok) {
+          console.log("Form data submitted successfully");
+          console.log(inquiryData);
+          setName("");
+          setEmail("");
+          setPhoneNum("");
+          setSubject("");
+          setMessage("");
+        } else {
+          console.error("Failed to submit form data");
+          throw new Error("Failed to save data to database");
+        }
       });
 
-      if (response.ok) {
-        console.log("Form data submitted successfully");
-        console.log(inquiryData);
-        setName("");
-        setEmail("");
-        setPhoneNum("");
-        setSubject("");
-        setMessage("");
-
-        toast.success("Message saved to servers");
-
-        // Send email after successfully saving data to the database
-        try {
-          await emailjs.send(
-            "service_king8",
-            "template_y7jupsr",
-            templateParams,
-            "YMQh1o1VaUixvbnJi",
-          );
-          toast.success("Message sent successfully!");
-        } catch (emailError) {
-          console.error("Failed to send the message:", emailError);
-          toast.error("Failed to send the message, please try again.");
-        }
-      } else {
-        console.error("Failed to submit form data");
-        throw new Error("Failed to save data to database");
-      }
+      toast.promise(response, {
+        loading: "Registering your account",
+        success: "Message saved to servers",
+        error: "Message sent successfully but with errors",
+      });
     } catch (err) {
       console.error("An unexpected error occurred:", err);
       toast.error("An unexpected error occurred. Please try again later.");
@@ -112,6 +130,7 @@ function InquireNow() {
     // Check if CAPTCHA challenge is completed
     if (window.grecaptcha && window.grecaptcha.getResponse()) {
       // CAPTCHA challenge completed, proceed with form submission
+      saveToDB(e);
       sendEmail(e);
     } else {
       // CAPTCHA challenge not completed, show error message or handle accordingly
