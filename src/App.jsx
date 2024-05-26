@@ -41,22 +41,23 @@ function App() {
         path="/login"
         component={() => <Login setIsAuthenticated={setIsAuthenticated} />}
       />
-      //Problem hereee
       <Route path="/sign-up" component={Register} />
       <Route path="/about us" component={About} />
       <Route path="/contact us" component={InquireNow} />
       <Route path="/products" component={Products} />
+
       <Route path="/inquiry" component={AdminInquiry} />
       <Route
         path="/admin"
         component={() =>
           isAuthenticated() ? (
-            <AdminProducts />
+            <AdminInquiry />
           ) : (
             <Login setIsAuthenticated={setIsAuthenticated} />
           )
         }
       />
+      <Route path="/product-editor" component={AdminProducts} />
       <Route path="*" component={NotFound} />
     </>
   );

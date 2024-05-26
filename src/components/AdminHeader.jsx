@@ -1,5 +1,6 @@
 import { createSignal } from "solid-js";
 import logo from "../assets/king8-logo.png";
+import { useNavigate } from "@solidjs/router";
 
 export default function AdminHeader({ setIsAuthenticated }) {
   const [error, setError] = createSignal(null);
@@ -8,7 +9,7 @@ export default function AdminHeader({ setIsAuthenticated }) {
     try {
       const response = await fetch("http://localhost:5000/logout-user", {
         method: "GET",
-        credentials: "include", 
+        credentials: "include",
       });
 
       if (!response.ok) {
@@ -17,8 +18,10 @@ export default function AdminHeader({ setIsAuthenticated }) {
       }
 
       // Set authentication state to false
-      setIsAuthenticated(false);
-      window.location.href = "/";
+      const navigate = useNavigate()
+      setIsAuthenticated(false, () => {
+        navigate('/');
+      });
     } catch (err) {
       setError(err.message);
     }
@@ -28,7 +31,7 @@ export default function AdminHeader({ setIsAuthenticated }) {
     <header>
       <nav class=" border-gray-200 px-8 lg:px-12 py-6 bg-zinc-100 drop-shadow-md">
         <div class="flex flex-wrap justify-between items-center mx-auto max-w-screen-xl">
-          <a href="https://flowbite.com" class="flex items-center">
+          <a href="/admin" class="flex items-center">
             <img src={logo} class="mr-3 h-6 sm:h-9" alt="Mindanao King8 Logo" />
             <span class="self-center text-xl font-semibold whitespace-nowrap text-blue-950">
               KING8 ADMIN VIEW
@@ -83,7 +86,7 @@ export default function AdminHeader({ setIsAuthenticated }) {
             <ul class="flex flex-col mt-4 font-medium lg:flex-row lg:space-x-8 lg:mt-0">
               <li>
                 <a
-                  href="#"
+                  href="/admin"
                   class="block py-2 pr-4 pl-3  rounded bg-primary-700 lg:bg-transparent lg:text-primary-700 lg:p-0 text-blue-950"
                   aria-current="page"
                 >
@@ -92,7 +95,7 @@ export default function AdminHeader({ setIsAuthenticated }) {
               </li>
               <li>
                 <a
-                  href="#"
+                  href="/inquiry"
                   class="block py-2 pr-4 pl-3 text-blue-950 border-b border-gray-100 hover:bg-gray-50 lg:hover:bg-transparent lg:border-0 lg:hover:text-primary-700 lg:p-0    dark:hover:bg-gray-700  hover:text-amber-400 lg:dark:hover:bg-transparent dark:border-gray-700"
                 >
                   INQUIRIES
@@ -100,7 +103,7 @@ export default function AdminHeader({ setIsAuthenticated }) {
               </li>
               <li>
                 <a
-                  href="#"
+                  href="/user-accounts"
                   class="block py-2 pr-4 pl-3 text-blue-950 border-b border-gray-100 hover:bg-gray-50 lg:hover:bg-transparent lg:border-0 lg:hover:text-primary-700 lg:p-0     dark:hover:bg-gray-700  hover:text-amber-400 lg:dark:hover:bg-transparent dark:border-gray-700"
                 >
                   USER ACCOUNTS
@@ -108,7 +111,7 @@ export default function AdminHeader({ setIsAuthenticated }) {
               </li>
               <li>
                 <a
-                  href="#"
+                  href="/product-editor"
                   class="block py-2 pr-4 pl-3 text-blue-950 border-b border-gray-100 hover:bg-gray-50 lg:hover:bg-transparent lg:border-0 lg:hover:text-primary-700 lg:p-0     dark:hover:bg-gray-700  hover:text-amber-400 lg:dark:hover:bg-transparent dark:border-gray-700"
                 >
                   PRODUCT EDITOR
