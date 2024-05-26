@@ -1,0 +1,5 @@
+FROM postgres:latest
+
+ENV POSTGRES_PASSWORD=lGTzsGizanefhDd56r
+
+EXPOSE 5432
