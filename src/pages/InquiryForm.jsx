@@ -36,7 +36,6 @@ function InquireNow() {
     document.body.appendChild(emailjsScript);
   });
 
-
   const sendEmail = (e) => {
     e.preventDefault();
     let parms = {
@@ -56,15 +55,6 @@ function InquireNow() {
       message: parms.message,
     };
 
-    // to save info to db
-    const inquiryData = {
-      name: parms.name,
-      subject: parms.subject,
-      mobile_num: parms.phoneNum,
-      email: parms.email,
-      msg: parms.message,
-    };
-
     emailjs
       .send(
         "service_king8",
@@ -78,9 +68,29 @@ function InquireNow() {
         },
         () => {
           toast.error("Failed to send the message, please try again.");
-          return;
         },
       );
+  };
+
+  const saveToDB = (e) => {
+    e.preventDefault();
+    let parms = {
+      name: name(),
+      email: email(),
+      phoneNum: phoneNum(),
+      subject: subject(),
+      message: message(),
+    };
+
+
+    // to save info to db
+    const inquiryData = {
+      name: parms.name,
+      subject: parms.subject,
+      mobile_num: parms.phoneNum,
+      email: parms.email,
+      msg: parms.message,
+    };
 
     //saving info to db proper
     try {
@@ -120,6 +130,7 @@ function InquireNow() {
     // Check if CAPTCHA challenge is completed
     if (window.grecaptcha && window.grecaptcha.getResponse()) {
       // CAPTCHA challenge completed, proceed with form submission
+      saveToDB(e);
       sendEmail(e);
     } else {
       // CAPTCHA challenge not completed, show error message or handle accordingly

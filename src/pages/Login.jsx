@@ -4,7 +4,7 @@ import { createSignal } from "solid-js";
 import { useNavigate } from "@solidjs/router";
 import { Toaster, toast } from "solid-toast";
 
-export default function Login(props) {
+export default function Login({ setIsAuthenticated }) {
   const [email, setEmail] = createSignal("");
   const [password, setPassword] = createSignal("");
   const [showPassword, setShowPassword] = createSignal(false);
@@ -36,9 +36,9 @@ export default function Login(props) {
         setPassword("");
 
         //setting localStorage session
-        localStorage.setItem("isAuthenticated", "true");
-        props.setIsAuthenticated(true);
         console.log("Reached this part");
+        setIsAuthenticated(true);
+        
         navigate("/admin", { replace: true });
       } else {
         console.error("Failed to Login");

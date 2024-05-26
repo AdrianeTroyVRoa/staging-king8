@@ -1,7 +1,15 @@
 const express = require("express");
 const logoutRouter = express.Router();
 
-logoutRouter.post("/logout-user", (req, res, next) => {
+logoutRouter.get('/auth/check-auth', (req, res) => {
+  if(req.isAuthenticated()) {
+    res.sendStatus(200)
+  } else {
+    res.sendStatus(401)
+  }
+})
+
+logoutRouter.get("/logout-user", (req, res, next) => {
   if (!req.user) {
     console.error("User not authenticated");
     return res.sendStatus(401); // Unauthorized
