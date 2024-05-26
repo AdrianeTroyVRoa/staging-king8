@@ -1,6 +1,6 @@
 function MenuSec() {
   return (
-    <section className="bg-blue-950 bg-cover bg-center flex items-center justify-center">
+    <section className="bg-blue-950 bg-cover bg-center flex items-center justify-center mb-8">
       <div className="flex flex-wrap container my-20">
         <div className="lg:w-1/4 sm:w-1/2 p-4">
           <a href="#visit">

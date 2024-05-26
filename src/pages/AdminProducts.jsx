@@ -190,7 +190,7 @@ export default function AdminProducts() {
                 <div className="relative w-full px-4 max-w-full flex-grow flex-1 text-right">
                   <button
                     onClick={openAddWindow}
-                    className="bg-blue-950 text-zinc-100 active:bg-blue-950 text-xs font-bold px-3 py-1 rounded outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150"
+                    className="default:bg-blue-950 text-zinc-100 active:bg-blue-950 text-xs font-bold px-3 py-1 rounded outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150"
                     type="button"
                   >
                     Add product

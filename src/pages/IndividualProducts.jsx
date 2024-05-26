@@ -1,79 +1,59 @@
-import Header from "../../components/Header";
-import pipes from "../../assets/pipes.jpg"
+import "../style/output.css";
+import Header from "../components/Header";
+import Footer from "../components/Footer";
+import { createSignal } from "solid-js";
 
 export default function IndividualProducts() {
+  const [product, setProduct] = createSignal('');
+  const [image, setImage] = createSignal('');
+  const [description, setDiscrption] = createSignal('');
+
+
   return (
-    <div className="relative bg-zinc-100 w-full ">
+    <div className="relative bg-zinc-100 w-full min-h-screen flex flex-col items-center">
       <Header />
-      <div class="container flex mx-20 px-10 my-20 p-20 w-2 ">
+      <div className="container mx-auto my-20 p-10 pt-10 bg-zinc-100 shadow-md rounded-md flex flex-col items-center">
         
-        <div class="grid grid-cols-2 md:grid-cols-2 gap-4 p b-20">
-          <img      
-            class="pl-4 w-full md:w-3 h-auto pr-4"
-            src={pipes}
-            alt="image description"
-          />
-          <div>
-            <h1 class="text-5xl md:text-5\xl lg:text-5xl font-bold leading-none tracking-tight text-red-geg dark:text-blue-950 mb-4 pl-2">
-              Pipes
+        {/* Main Content Container */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 w-full max-w-4xl">
+          
+          {/* Image Container */}
+          <div className="flex justify-center">
+            <img
+              className="w-full h-auto md:w-1/2"
+              src={image()}
+              alt="image description"
+            />
+          </div>
+          
+          {/* Text and Button Container */}
+          <div className="flex flex-col items-start">
+            <h1 className="text-5xl md:text-5xl lg:text-5xl font-bold leading-none tracking-tight text-red-geg dark:text-blue-950 mb-4">
+              {product()}
             </h1>
-            <p class="text-blue-950 dark:text-blue-950 text-justify pl-2 mr-5 ">
-              Durable, lightweight, and versatile solutions for plumbing,
-              drainage, and industrial systems. They offer corrosion resistance,
-              easy installation, and long-lasting performance, making them ideal
-              for various applications.
+            <p className="text-blue-950 dark:text-blue-950 text-justify mb-6">
+              {description()}
             </p>
             
-
-            <div class="grid grid-cols-1 md:grid-cols-2">
-              <form class="max-w-sm mx-0 mb-4 pt-10">
-                <label
-                  for="countries"
-                  class="text-2xl font-bold leading-none tracking-tight text-red-geg dark:text-blue-950 mb-4 pl-2 pt-10"
-                >
-                  Quantity:{" "}
-                </label>
-
-                <select
-                  id="Quantity"
-                  class="font-bold border-solid border-2 border-blue-950 text-blue-950 py-1 px-3 rounded-lg hover:bg-white "
-                >
-                  <option selected></option>
-                  <option value="1">1</option>
-                  <option value="2">2</option>
-                  <option value="3">3</option>
-                  <option value="4">4</option>
-                </select>
-              </form>
-            </div>
-
-            <div className="flex mt-1">
-              <div className="hidden justify-between items-center w-full lg:flex lg:w-auto lg:order-1 pt-2">
-                <div className="flex flex-col mt-4 lg:flex-row lg:space-x-8 lg:mt-0 pl-2">
-                  <button className="font-bold bg-amber-400 text-blue-950 py-3 px-4 rounded-lg hover:bg-amber-500">
-                    INQUIRE NOW
-                  </button>
-                  <button className="font-bold border-solid border-2 border-blue-950 text-blue-950 py-3 px-4 rounded-lg hover:bg-white">
-                    ADD TO INQUIRY
-                  </button>
-                </div>
-              </div>
+            <div className="w-full flex justify-start mt-10">
+              <button href="#" className="font-bold bg-amber-400 text-blue-950 py-3 px-4 rounded-lg hover:bg-amber-500">
+                INQUIRE NOW
+              </button>
             </div>
           </div>
-          <div class="flex mx-20 mt-1 justify-center items-center">
-              <div className="hidden justify-between items-center w-full lg:flex lg:w-auto lg:order-1 pt-2">
-                <div className="flex flex-col mt-4 lg:flex-row lg:space-x-8 lg:mt-0 pl-2">
-                <button className="font-bold border-solid border-2 border-blue-950 text-blue-950 py-1 px-3 rounded-lg hover:bg-amber-400">
-                  &lt;
-                  </button>
-                  <button className="font-bold border-solid border-2 border-blue-950 text-blue-950 py-1 px-3 rounded-lg hover:bg-amber-400">
-                  &gt;
-                  </button>
-                </div>
-              </div>
-            </div>
+        </div>
+        
+        {/* Navigation Buttons */}
+        <div className="flex items-center mt-10">
+          <button className="font-bold border-solid border-2 border-blue-950 text-blue-950 py-2 px-4 rounded-lg hover:bg-amber-400 mx-3"> 
+            &lt;
+          </button>
+          <button className="font-bold border-solid border-2 border-blue-950 text-blue-950 py-2 px-4 rounded-lg hover:bg-amber-400 mx-3"> 
+            &gt;
+          </button>
         </div>
       </div>
+      <Footer />
     </div>
   );
 }

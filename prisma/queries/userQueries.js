@@ -16,11 +16,26 @@ async function getUserById(userId) {
 }
 
 async function getUserByEmail(email) {
-  return prisma.user.findUnique({
+  const user = await prisma.user.findUnique({
     where: {
       email: email,
     },
+    include: {
+      Customer: true,
+      Employee: true,
+    },
   });
+
+  if (!user) {
+    return null;
+  }
+
+  const userType = user.Customer ? 'Customer' : user.Employee ? 'Employee' : 'Unknown';
+  
+  return {
+    ...user,
+    userType: userType,
+  };
 }
 
 module.exports = {
