@@ -1,7 +1,6 @@
-import { createSignal } from "solid-js";
+import { createEffect, createSignal } from "solid-js";
 import { Toaster } from "solid-toast";
 import * as yup from "yup";
-import pipes from "../assets/Pipes_King8.png";
 import AdminHeader from "../components/AdminHeader";
 
 const schema = yup.object().shape({
@@ -24,6 +23,8 @@ export default function AdminProducts() {
   const [productName, setProductName] = createSignal("");
   const [numLeft, setNumLeft] = createSignal("");
   const [description, setDescription] = createSignal("");
+  const [imageUrl, setImageUrl] = createSignal("");
+  const [products, setProducts] = createSignal([]);
 
   const [isEditModalOpen, setIsEditModalOpen] = createSignal(false);
   const [isAddModalOpen, setIsAddModalOpen] = createSignal(false);
@@ -31,29 +32,38 @@ export default function AdminProducts() {
   const [isConfirmEditOpen, setIsConfirmEditOpen] = createSignal(false);
   const [isConfirmDeleteOpen, setIsConfirmDeleteOpen] = createSignal(false);
 
+  const openAdd = () => {
+    console.log("Confirm adding product");
+    setIsConfirmModalOpen(true);
+  }
   const handleSend = async (e) => {
     console.log("Finshed add products form")
     e.preventDefault();
+    
     const addFormData = {
       product_name: productName(),
       num_left: numLeft(),
       description: description(),
+      image_url: imageUrl(),
     };
 
     try{
       await schema.validate(addFormData, { abortEarly: false });
-      const response = fetch("http://localhost:5000/add-product", {
+      const response = await fetch('http://localhost:5000/add-product', {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(addFormData),
       });
       
-      
         if(response.ok){
           console.log("Product successfully added");
-          setProductName("");
-          setNumLeft("");
-          setDescription("");
+          const newProduct = await response.json();
+          setProducts([...products(), newProduct]);
+          
+          setProductName('');
+          setNumLeft('');
+          setDescription('');
+          setImageUrl('');
           
         } else{
           console.error("Failed to add product");
@@ -62,40 +72,62 @@ export default function AdminProducts() {
     } catch(err) {
       console.error("Error:", err.message);
     }
+    closeAddProduct();
   };
-  
-    
+  const closeAddProduct = () => {
+    setIsAddModalOpen(false);
+    setIsConfirmModalOpen(false);
+  }
+  const fetchProducts = async () => {
+    try{
+      const response = await fetch('http://localhost:5000/products');
+      if (response.ok) {
+        const data = await response.json();
+        setProducts(data);
+      } else {
+        console.error("Failed to fetch products");
+      }
+    } catch (error) {
+      console.error("Error fetching products:", error);
+    }
+  };
+
+  createEffect(()=>{
+    fetchProducts();
+  });
+  const openUpdate = (product) =>{
+    console.log("Confirming product changes")
+    setIsConfirmEditOpen(true);
+  };
+
   const handleUpdate = async (e) => {
+    console.log("Finshed update products form")
     e.preventDefault();
     const updateFormData = {
-      name: productName(),
+      product_name: productName(),
       num_left: numLeft(),
       description: description(),
+      image_url: imageUrl(),
     };
 
     try{
-      await schema.validate(updateFormData);
-      const response = fetch("https://localhost:5000/update-product", {
+      await schema.validate(updateFormData, { abortEarly: false });
+      const response = await fetch("http://localhost:5000/update-product/${productId}", {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(updateFormData),
-      }).then((response)=>{
+      });
+
         if(response.ok){
+          isConfirmEditOpen(true);
           console.log("Product updated successfully");
           
         } else{
           console.error("Error updating product");
           throw new Error("Error updating product");
         }
-      });
-
-      toast.promise(response, {
-        loading: "Updating product",
-        success: "Product successfully updated",
-        error: "Error updating product",
-      });
     } catch(err){
-      if(err instanceof yup.ValidationError){
+      if(err){
         const errorMessages = {};
         err.inner.forEach((error) => {
           errorMessages[error.path] = error.message;
@@ -104,30 +136,27 @@ export default function AdminProducts() {
     }
   };
 
-  const handleDelete = async (e) => {
+  const openDelete = () =>{
+    console.log("Confirming product deletion")
+    setIsConfirmDeleteOpen(true);
+  }
+
+  const handleDelete = async (productId) => {
+    
     try{
-      const response = fetch("https://localhost:5000/delete-product", {
+      const response = await fetch(`http://localhost:5000/delete-product/${productId}`, {
         method: "DELETE",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({name: productName()}),
-      }).then((response)=>{
+      });
+
         if(response.ok){
           console.log("Product deleted successfully");
-          setProductName("");
-          setNumLeft("");
-          setDescription("");
+          
         } else {
           console.error("Delete failed");
-          throw new Error("Delete failed");
         }
-      });
-      toast.promise(response, {
-        loading: "Deleting product",
-        success: "Product successfully deleted",
-        error: "Error deleting product",
-      });
+      
     } catch (err){
-      console.err(err);
+      console.error("Error:", err.message);
     }
   };
 
@@ -184,32 +213,32 @@ export default function AdminProducts() {
                       Description
                     </th>
                     <th className="px-6   text-blue-950 align-middle border border-solid border-blueGray-100 py-3 text-xs uppercase border-l-0 border-r-0 whitespace-nowrap font-semibold text-left">
+                      Items Left
+                    </th>
+                    <th className="px-6   text-blue-950 align-middle border border-solid border-blueGray-100 py-3 text-xs uppercase border-l-0 border-r-0 whitespace-nowrap font-semibold text-left">
                       ---
                     </th>
                   </tr>
                 </thead>
 
                 <tbody>
-                  <tr>
-                    <th className="border-t-0 px-6 align-middle border-l-0 border-r-0  whitespace-nowrap p-4">
-                      <img className="w-20 h-20" src={pipes} />
-                    </th>
-                    <th className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4 text-left text-blueGray-700">
-                      Pipes
-                    </th>
-                    <td className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4">
-                      Lorem ipsum dolor sit amet, consectetur adipiscing elit
-                    </td>
-                    <td>
-                      <button
-                        onClick={openEditWindow}
+                {products().map((product) => (
+            <tr key={product.id}>
+            <td className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4">{product.image_url}</td>
+              <th className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4 text-left text-blueGray-700">{product.product_name}</th>
+              <td className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4">{product.description}</td>
+              <td className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4">{product.num_left}</td>
+              <td>
+              <button
+                        onClick={()=>openEditWindow(product)}
                         className="border-t-0 px-6 align-center border-l-0 border-r-0 text-xs underline whitespace-nowrap p-4"
                         type="button"
                       >
                         Edit
                       </button>
-                    </td>
-                  </tr>
+              </td>
+            </tr>
+          ))}
                 </tbody>
               </table>
               {isAddModalOpen() && (
@@ -218,7 +247,7 @@ export default function AdminProducts() {
 
                   <div class="absolute bg-gray-100 rounded-lg p-8 shadow-lg">
                     <div class="modal-content flex justify-center items-center bg-zinc-100">
-                      <form action="#" class="w-full" onSubmit={handleSend}>
+                      <form action="#" class="w-full">
                         <div class="grid gap-4 mb-4 sm:grid-cols-2">
                           <h3 class="text-lg font-semibold text-gray-900">
                             Add product
@@ -244,20 +273,7 @@ export default function AdminProducts() {
                             </svg>
                             <span class="sr-only">Close modal</span>
                           </button>
-                          <div className="-mt-6">
-                            <div class="relative w-48 h-48 mt-8 overflow-hidden bg-zinc-100 border border-gray-300 rounded-t-lg"></div>
-                            <label
-                              class="text-blue-950 inline-flex border border-gray-300 justify-center items-center bg-gray-200 hover:bg-amber-400 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-b-lg text-sm w-48 py-2.5 text-center"
-                              for="user_avatar"
-                            >
-                              Upload picture
-                            </label>
-                            <input
-                              class="hidden"
-                              id="user_avatar"
-                              type="file"
-                            />
-                          </div>
+                          
                           <div>
                             <label
                               for="name"
@@ -293,6 +309,24 @@ export default function AdminProducts() {
                                 required
                               />
                             </div>
+                            <div className="mt-4">
+                              <label
+                                for="brand"
+                                class="block mb-2 text-sm font-medium text-gray-900   "
+                              >
+                                Image URL:
+                              </label>
+                              <input
+                                type="text"
+                                name="image_url"
+                                id="image_url"
+                                value={imageUrl()}
+                                onInput={(e)=>setImageUrl(e.target.value)}
+                                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5"
+                                placeholder="Enter link"
+                                required
+                              />
+                            </div>
                           </div>
 
                           <div className="sm:col-span-2">
@@ -315,7 +349,8 @@ export default function AdminProducts() {
                         </div>
                         <div>
                           <button
-                            type="submit"
+                            onClick={openAdd}
+                            type="button"
                             class="text-zinc-100 inline-flex items-center bg-gray-700 hover:bg-primary-800 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm  py-2.5 mt-2 justify-center w-full"
                           >
                             Add product
@@ -332,7 +367,7 @@ export default function AdminProducts() {
 
                   <div class="absolute bg-gray-100 rounded-lg p-8 shadow-lg max-w-lg w-full">
                     <div class="modal-content flex justify-center items-center bg-zinc-100">
-                      <form action="#" class="w-full" onSubmit={handleUpdate}>
+                      <form action="#" class="w-full" onSubmit={openUpdate}>
                         <div class="grid gap-4 mb-4 md:grid-cols-2 sm:grid-cols-2">
                           <h3 class="text-lg font-semibold text-gray-900">
                             Edit product
@@ -358,20 +393,7 @@ export default function AdminProducts() {
                             </svg>
                             <span class="sr-only">Close modal</span>
                           </button>
-                          <div className="-mt-6">
-                            <div class="relative w-48 h-48 mt-8 overflow-hidden bg-zinc-100 border border-gray-300 rounded-t-lg"></div>
-                            <label
-                              class="text-blue-950 inline-flex border border-gray-300 justify-center items-center bg-gray-200 hover:bg-amber-400 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-b-lg text-sm w-48 py-2.5 text-center"
-                              for="user_avatar"
-                            >
-                              Upload picture
-                            </label>
-                            <input
-                              class="hidden"
-                              id="user_avatar"
-                              type="file"
-                            />
-                          </div>
+                          
                           <div>
                             <label
                               for="name"
@@ -383,9 +405,9 @@ export default function AdminProducts() {
                               type="text"
                               name="name"
                               id="name"
-                              value={name}
+                              value={productName()}
                               class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5"
-                              placeholder="Type product name"
+                              placeholder="Type name"
                               required=""
                             />
                             <div className="mt-4">
@@ -399,10 +421,28 @@ export default function AdminProducts() {
                                 type="text"
                                 name="num_left"
                                 id="num_left"
-                                value={numLeft}
+                                value={numLeft()}
                                 class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5"
                                 placeholder="Type quantity"
                                 required=""
+                              />
+                            </div>
+                            <div className="mt-4">
+                              <label
+                                for="brand"
+                                class="block mb-2 text-sm font-medium text-gray-900   "
+                              >
+                                Image URL:
+                              </label>
+                              <input
+                                type="text"
+                                name="image_url"
+                                id="image_url"
+                                value={imageUrl()}
+                                onInput={(e)=>setImageUrl(e.target.value)}
+                                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5"
+                                placeholder="Enter link"
+                                required
                               />
                             </div>
                           </div>
@@ -417,7 +457,7 @@ export default function AdminProducts() {
                             <textarea
                               id="description"
                               rows="6"
-                              value={description}
+                              value={description()}
                               className="block p-2.5 w-full text-sm text-blue-950 bg-grey-50 rounded-lg border border-gray-300 focus:ring-primary-500 focus:border-primary-500"
                               placeholder="Your description here"
                             ></textarea>
@@ -425,13 +465,15 @@ export default function AdminProducts() {
                         </div>
                         <div>
                           <button
+                            
                             type="submit"
                             class="text-zinc-100 inline-flex  items-center bg-gray-700 hover:bg-primary-800 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm  px-4 py-2.5 justify-center"
                           >
                             Confirm changes
                           </button>
                           <button
-                            onClick={openConfirmDelete}
+                            type="button"
+                            onClick={openDelete}
                             class="text-zinc-100 items-center bg-red-700 hover:bg-primary-800 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-4 py-2.5 ml-4 justify-center"
                           >
                             Delete product
@@ -465,10 +507,7 @@ export default function AdminProducts() {
                     </div>
                     <div class="flex">
                       <button
-                        onClick={() => {
-                          closeConfirmAddWindow();
-                          closeAddWindow();
-                        }}
+                        onClick={handleSend}
                         type="button"
                         class="text-white bg-gray-800 hover:bg-gray-900 focus:ring-4 focus:outline-none focus:ring-gray-300 font-medium rounded-lg text-xs px-3 py-1.5 me-2 text-center inline-flex items-center"
                       >
@@ -510,7 +549,7 @@ export default function AdminProducts() {
                     </div>
                     <div class="flex">
                       <button
-                        onClick={closeConfirmEdit}
+                        onClick={handleUpdate}
                         type="button"
                         class="text-white bg-gray-800 hover:bg-gray-900 focus:ring-4 focus:outline-none focus:ring-gray-300 font-medium rounded-lg text-xs px-3 py-1.5 me-2 text-center inline-flex items-center"
                       >
@@ -552,10 +591,7 @@ export default function AdminProducts() {
                     </div>
                     <div class="flex">
                       <button
-                        onClick={() => {
-                          closeConfirmDelete();
-                          closeEditWindow();
-                        }}
+                        onClick={handleDelete}
                         type="button"
                         class="text-white bg-red-800 hover:bg-red-900 focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-lg text-xs px-3 py-1.5 me-2 text-center inline-flex items-center"
                       >

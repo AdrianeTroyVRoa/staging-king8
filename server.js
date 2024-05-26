@@ -6,7 +6,6 @@ const passport = require("passport");
 
 const regisRouter = require("./routes/register.js");
 const loginRouter = require("./routes/login.js");
-
 const cors = require("cors");
 app.use(
   cors({
@@ -15,11 +14,10 @@ app.use(
   }),
 );
 
+const productRouter = require("./routes/products.js");
 const inquiryRouter = require("./routes/inquiry.js");
 
 const logoutRouter = require("./routes/logout.js");
-//const product = require('./routes/products.js');
-//const productRouter = product.productRouter;
 
 app.use(express.json());
 app.use(express.static(path.join(__dirname, "dist")));
@@ -40,8 +38,8 @@ app.use(passport.session());
 
 app.use(regisRouter);
 app.use(loginRouter);
+app.use(productRouter);
 app.use(inquiryRouter);
-//app.use(productRouter);
 app.use(logoutRouter);
 
 //api workings
