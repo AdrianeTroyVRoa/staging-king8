@@ -25,6 +25,7 @@ export default function AdminProducts() {
   const [description, setDescription] = createSignal("");
   const [imageUrl, setImageUrl] = createSignal("");
   const [products, setProducts] = createSignal([]);
+  const [selectedProd, setSelectedProd] = createSignal({});
 
   const [isEditModalOpen, setIsEditModalOpen] = createSignal(false);
   const [isAddModalOpen, setIsAddModalOpen] = createSignal(false);
@@ -224,8 +225,8 @@ export default function AdminProducts() {
                 <tbody>
                 {products().map((product) => (
             <tr key={product.id}>
-            <td className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4">{product.image_url}</td>
-              <th className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4 text-left text-blueGray-700">{product.product_name}</th>
+            <td className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4">{product.image_src}</td>
+              <th className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4 text-left text-blueGray-700">{product.name}</th>
               <td className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4">{product.description}</td>
               <td className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4">{product.num_left}</td>
               <td>
@@ -405,7 +406,7 @@ export default function AdminProducts() {
                               type="text"
                               name="name"
                               id="name"
-                              value={productName()}
+                              value={selectedProd().name}
                               class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5"
                               placeholder="Type name"
                               required=""
