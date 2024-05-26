@@ -2,9 +2,22 @@ import { createEffect, createResource, createSignal, onMount } from "solid-js";
 import AdminHeader from "../components/AdminHeader";
 
 export default function AdminInquiry() {
-  let pendingInquiries = [];
-  let resolvedInquiries = [];
-  let archivedInquiries = [];
+  const [pendingInquiries, setPendingInquiries] = createSignal([]);
+  const [resolvedInquiries, setResolvedInquiries] = createSignal([]);
+  const [archivedInquiries, setArchivedInquiries] = createSignal([]);
+
+  const addPending = (newPending) => {
+    setPendingInquiries((prevPendings) => [...prevPendings, newPending])
+  }
+
+  const addResolved = (newResolved) => {
+    setPendingInquiries((prevResolved) => [...prevResolved, newResolved])
+  }
+
+  const addArchived = (newArchived) => {
+    setPendingInquiries((prevArchived) => [...prevArchived, newArchived])
+  }
+
   const fetchQueries = async () => {
     try {
       const response = await fetch("http://localhost:5000/get-inquiries");
@@ -17,15 +30,16 @@ export default function AdminInquiry() {
       console.error("Error fetching inquiries:", error);
     }
   };
+
   onMount(() => {
     fetchQueries().then((result) => {
       for (let i = 0; i < result.length; i++) {
         if (result[i].status == "PENDING") {
-          pendingInquiries.push(result[i]);
+          addPending(result[i]);
         } else if (result[i].status == "RESOLVED") {
-          resolvedInquiries.push(result[i]);
+          addResolved(result[i]);
         } else {
-          archivedInquiries.push(result[i]);
+          addArchived(result[i]);
         }
       }
     });
@@ -291,11 +305,11 @@ export default function AdminInquiry() {
                 </thead>
                 <tbody>
                   {activePendingView() &&
-                    renderInquiry(pendingInquiries, "pending")}
+                    renderInquiry(pendingInquiries(), "pending")}
                   {activeResolvedView() &&
-                    renderInquiry(resolvedInquiries, "resolved")}
+                    renderInquiry(resolvedInquiries(), "resolved")}
                   {activeArchivedView() &&
-                    renderInquiry(archivedInquiries, "archived")}
+                    renderInquiry(archivedInquiries(), "archived")}
                 </tbody>
               </table>
 
